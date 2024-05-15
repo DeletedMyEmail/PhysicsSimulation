@@ -9,7 +9,7 @@ FILE(GLOB_RECURSE SOURCE "include/**.h" "src/**.cpp" "src/**.c")
 add_executable(SimulationGoesBRr ${SOURCE}
         src/Model.cpp
         include/Model.h
-        src/shader/Shader.cpp
+        src/Shader.cpp
         include/Shader.h)
 
 target_link_libraries(${PROJECT_NAME} glfw OpenGL::GL)
