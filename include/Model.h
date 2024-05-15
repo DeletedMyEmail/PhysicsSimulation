@@ -6,3 +6,4 @@ typedef struct {
     GLfloat* vertices;
     GLuint* verticesSize;
 } Mesh;
+

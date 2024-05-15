@@ -1,11 +1,16 @@
 #include "../../include/Shader.h"
-
 #include <fstream>
 #include <sstream>
+#include <exception>
+
+class ShaderNotFoundException final : std::exception {};
 
 GLuint createShader(const char* pVertexShaderSource, const char* pFragmentShaderSource) {
     std::ifstream lVertexFile(pVertexShaderSource);
     std::ifstream lFragFile(pFragmentShaderSource);
+
+    if (!lVertexFile.is_open() || !lFragFile.is_open())
+        throw ShaderNotFoundException();
 
     std::stringstream lVertexBuffer, lFragBuffer;;
     lFragBuffer << lFragFile.rdbuf();
