@@ -6,10 +6,6 @@ FIND_PACKAGE(OpenGL REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 
 FILE(GLOB_RECURSE SOURCE "include/**.h" "src/**.cpp" "src/**.c")
-add_executable(SimulationGoesBRr ${SOURCE}
-        src/Model.cpp
-        include/Model.h
-        src/Shader.cpp
-        include/Shader.h)
+add_executable(SimulationGoesBRr ${SOURCE})
 
 target_link_libraries(${PROJECT_NAME} glfw OpenGL::GL)

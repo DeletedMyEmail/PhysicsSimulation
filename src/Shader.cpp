@@ -16,10 +16,12 @@ Shader::Shader(const char* pVertexShaderSource, const char* pFragmentShaderSourc
     glAttachShader(mShaderProgram, lVertShader);
     glAttachShader(mShaderProgram, lFragShader);
 
+    glLinkProgram(mShaderProgram);
+
     glDeleteShader(lVertShader);
     glDeleteShader(lFragShader);
 
-    bind();
+    unbind();
 }
 
 Shader::~Shader() {
@@ -34,8 +36,8 @@ void Shader::unbind() {
     glUseProgram(0);
 }
 
-GLuint Shader::compile(const char* pShaderSource, GLenum pShaderType) {
-    const GLuint lShaderID = glCreateShader(GL_VERTEX_SHADER);
+GLuint Shader::compile(const char* pShaderSource, const GLenum pShaderType) {
+    const GLuint lShaderID = glCreateShader(pShaderType);
 
     int lCompRes;
     glShaderSource(lShaderID, 1, &pShaderSource, nullptr);
@@ -53,7 +55,6 @@ GLuint Shader::compile(const char* pShaderSource, GLenum pShaderType) {
         return 0;
     }
 
-    std::cout << "Shader compiled successfully" << std::endl;
     return lShaderID;
 }
 
