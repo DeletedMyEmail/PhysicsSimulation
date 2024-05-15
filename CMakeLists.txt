@@ -11,4 +11,5 @@ add_executable(SimulationGoesBRr ${SOURCE}
         include/Model.h
         src/shader/Shader.cpp
         include/Shader.h)
+
 target_link_libraries(${PROJECT_NAME} glfw OpenGL::GL)
