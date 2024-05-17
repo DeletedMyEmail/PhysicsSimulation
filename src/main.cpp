@@ -2,14 +2,13 @@
 #include <valarray>
 #include "../include/glad.h"
 #include "../include/Shader.h"
-#include "../include/Model.h"
+#include "../include/Mesh.h"
 #include <GLFW/glfw3.h>
-
 #include "../include/IndexBuffer.h"
 #include "../include/VertexBuffer.h"
 
-#define WIDTH 1200
-#define HEIGHT 800
+#define WIDTH 1600
+#define HEIGHT 1200
 
 GLFWwindow* glfwSetup();
 
@@ -38,17 +37,13 @@ int main() {
 
     const Shader lBasicShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
 
-    const VertexBuffer lVertBuffer(lVertices, 3);
-    const IndexBuffer lIndexBuffer(lIndices, 3);
+    Mesh lMesh("../models/Brunnen.obj");
 
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.07f, 0.14f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         lBasicShader.bind();
-        lVertBuffer.bind();
-        lIndexBuffer.bind();
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        lMesh.draw();
         glfwSwapBuffers(window);
 
         glfwPollEvents();

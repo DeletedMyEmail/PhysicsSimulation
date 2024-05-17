@@ -1,9 +1,13 @@
 #include "../include/IndexBuffer.h"
 
-IndexBuffer::IndexBuffer(const unsigned int* pIndices, const unsigned int pSize) : bufferID(0) {
+#include <iostream>
+
+IndexBuffer::IndexBuffer() : count(0), bufferID(0) {}
+
+IndexBuffer::IndexBuffer(const unsigned int* pIndices, const GLsizei pCount) : count(pCount), bufferID(0) {
     glGenBuffers(1, &bufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, pSize * sizeof(unsigned int), pIndices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, pCount * sizeof(unsigned int), pIndices, GL_STATIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer() {
@@ -16,4 +20,8 @@ void IndexBuffer::bind() const {
 
 void IndexBuffer::unbind() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+GLsizei IndexBuffer::getCount() const {
+    return count;
 }

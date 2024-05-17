@@ -11,5 +11,5 @@ public :
 private:
     static GLuint compile(const char* pShaderSource, GLenum pShaderType);
     static std::string parse(const char* pShaderSource);
-    GLuint mShaderProgram;
+    GLuint shaderProgram;
 };

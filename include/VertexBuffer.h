@@ -1,14 +1,23 @@
 #pragma once
 
 #include "glad.h"
-#include "Model.h"
+
+typedef struct {
+    GLfloat x, y, z;
+    GLfloat r, g, b;
+} Vertex;
 
 class VertexBuffer {
 public:
-    VertexBuffer(const Vertex* pData, unsigned long pSize);
+    VertexBuffer();
+    VertexBuffer(const Vertex* pData, GLsizei pCount);
     ~VertexBuffer();
+
     void bind() const;
     static void unbind();
+
+    GLsizei getCount() const;
 private:
-    GLuint  bufferID, vao;
+    GLsizei count;
+    GLuint bufferID, vao;
 };

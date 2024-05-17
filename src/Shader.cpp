@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-Shader::Shader(const char* pVertexShaderSource, const char* pFragmentShaderSource) : mShaderProgram(glCreateProgram()) {
+Shader::Shader(const char* pVertexShaderSource, const char* pFragmentShaderSource) : shaderProgram(glCreateProgram()) {
     const std::string lVertexString = parse(pVertexShaderSource);
     const char* lVertexCString = lVertexString.c_str();
     const GLuint lVertShader = compile(lVertexCString, GL_VERTEX_SHADER);
@@ -13,10 +13,10 @@ Shader::Shader(const char* pVertexShaderSource, const char* pFragmentShaderSourc
     const char* lFragCString = lFragString.c_str();
     const GLuint lFragShader = compile(lFragCString, GL_FRAGMENT_SHADER);
 
-    glAttachShader(mShaderProgram, lVertShader);
-    glAttachShader(mShaderProgram, lFragShader);
+    glAttachShader(shaderProgram, lVertShader);
+    glAttachShader(shaderProgram, lFragShader);
 
-    glLinkProgram(mShaderProgram);
+    glLinkProgram(shaderProgram);
 
     glDeleteShader(lVertShader);
     glDeleteShader(lFragShader);
@@ -25,11 +25,11 @@ Shader::Shader(const char* pVertexShaderSource, const char* pFragmentShaderSourc
 }
 
 Shader::~Shader() {
-    glDeleteProgram(mShaderProgram);
+    glDeleteProgram(shaderProgram);
 }
 
 void Shader::bind() const {
-    glUseProgram(mShaderProgram);
+    glUseProgram(shaderProgram);
 }
 
 void Shader::unbind() {
