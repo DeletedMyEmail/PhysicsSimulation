@@ -1,5 +1,5 @@
 #pragma once
-#include "glad.h"
+#include "../libs/glad/glad.h"
 
 class IndexBuffer {
 public:

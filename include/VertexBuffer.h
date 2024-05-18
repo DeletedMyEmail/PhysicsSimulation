@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glad.h"
+#include "../libs/glad/glad.h"
 
 typedef struct {
     GLfloat x, y, z;

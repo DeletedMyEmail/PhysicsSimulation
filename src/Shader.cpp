@@ -36,6 +36,10 @@ void Shader::unbind() {
     glUseProgram(0);
 }
 
+GLuint Shader::getShaderId() const {
+    return shaderProgram;
+}
+
 GLuint Shader::compile(const char* pShaderSource, const GLenum pShaderType) {
     const GLuint lShaderID = glCreateShader(pShaderType);
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "glad.h"
+#include "../libs/glad/glad.h"
 
 class Shader {
 public :
@@ -8,6 +8,8 @@ public :
     ~Shader();
     void bind() const;
     static void unbind();
+
+    GLuint getShaderId() const;
 private:
     static GLuint compile(const char* pShaderSource, GLenum pShaderType);
     static std::string parse(const char* pShaderSource);

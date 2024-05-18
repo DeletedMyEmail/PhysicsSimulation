@@ -1,8 +1,10 @@
 #include <iostream>
-#include "../include/glad.h"
+#include "../libs/glad/glad.h"
+#include "../libs/glm/glm.hpp"
 #include "../include/Shader.h"
 #include "../include/Mesh.h"
 #include "../include/Metric.h"
+#include "../include/Model.h"
 #include <GLFW/glfw3.h>
 
 #define WIDTH 1600
@@ -19,17 +21,24 @@ int main() {
 
     const Shader lBasicShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
     const Mesh lMesh("../models/Brunnen.obj");
+    Model lBrunnenModel(&lMesh, &lBasicShader);
+    lBrunnenModel.scale(glm::vec3(0.5f));
 
     FPSCounter lFPSCounter;
     while(!glfwWindowShouldClose(window)) {
+        // clear
         glClearColor(0.07f, 0.14f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        lBasicShader.bind();
-        lMesh.draw();
+
+        // draw
+        lBrunnenModel.rotate(50.0f*lFPSCounter.getLastDeltaTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+        lBrunnenModel.bind();
         glfwSwapBuffers(window);
 
+        // events
         glfwPollEvents();
 
+        // metrics
         lFPSCounter.update();
         if (lFPSCounter.getElapsed() >= 1.0/30) {
             glfwSetWindowTitle(window, lFPSCounter.calcToString().c_str());
@@ -54,7 +63,6 @@ GLFWwindow* glfwSetup() {
 #else
     GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "A Simulation", nullptr, NULL);
 #endif
-
 
     if (!window) {
         glfwTerminate();
