@@ -68,7 +68,6 @@ bool Mesh::parse(const char* pModelPath, VertexBuffer& pVertexBuffer, IndexBuffe
         }
     }
 
-    std::cout << "Indices: " << lIndices[0] << ", " << lIndices[1] << ", " << lIndices[2] << "\n";
     lFile.close();
 
     auto* lVerticesArray = new Vertex[lVertices.size()];

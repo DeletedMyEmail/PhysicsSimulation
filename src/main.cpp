@@ -1,14 +1,14 @@
 #include <iostream>
-#include <valarray>
 #include "../include/glad.h"
 #include "../include/Shader.h"
 #include "../include/Mesh.h"
+#include "../include/Metric.h"
 #include <GLFW/glfw3.h>
-#include "../include/IndexBuffer.h"
-#include "../include/VertexBuffer.h"
 
 #define WIDTH 1600
 #define HEIGHT 1200
+#define VYSNC
+//#define FULLSCREEN
 
 GLFWwindow* glfwSetup();
 
@@ -17,28 +17,10 @@ int main() {
     if (!window)
         return -1;
 
-    Vertex lVertices[] = {
-        Vertex{
-            -0.5f, -0.5f, 0.0f,
-            0.9f, 0.2f, 0.5f
-        },
-        Vertex{
-            0.0f, 0.5f, 0.0f,
-            0.1f, 0.8f, 0.2f
-        },
-        Vertex{
-            0.5f, 0.5f, 0.0f,
-            0.4f, 0.5f, 0.1f
-        },
-    };
-    unsigned int lIndices[] = {
-        0, 1, 2
-    };
-
     const Shader lBasicShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
+    const Mesh lMesh("../models/Brunnen.obj");
 
-    Mesh lMesh("../models/Brunnen.obj");
-
+    FPSCounter lFPSCounter;
     while(!glfwWindowShouldClose(window)) {
         glClearColor(0.07f, 0.14f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -47,6 +29,11 @@ int main() {
         glfwSwapBuffers(window);
 
         glfwPollEvents();
+
+        lFPSCounter.update();
+        if (lFPSCounter.getElapsed() >= 1.0/30) {
+            glfwSetWindowTitle(window, lFPSCounter.calcToString().c_str());
+        }
     }
 
     glfwTerminate();
@@ -62,13 +49,23 @@ GLFWwindow* glfwSetup() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "A Simulation", NULL, NULL);
+#ifdef FULLSCREEN
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "A Simulation", glfwGetPrimaryMonitor(), NULL);
+#else
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "A Simulation", nullptr, NULL);
+#endif
+
+
     if (!window) {
         glfwTerminate();
         return nullptr;
     }
 
     glfwMakeContextCurrent(window);
+
+    #ifndef VYSNC
+        glfwSwapInterval(0);
+    #endif
 
     gladLoadGL();
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {

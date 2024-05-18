@@ -1,6 +1,5 @@
 #include "../include/VertexBuffer.h"
 #include <cstddef>
-#include <iostream>
 
 VertexBuffer::VertexBuffer() : count(0), bufferID(0), vao(0) {}
 

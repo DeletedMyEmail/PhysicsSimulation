@@ -1,7 +1,5 @@
 #include "../include/IndexBuffer.h"
 
-#include <iostream>
-
 IndexBuffer::IndexBuffer() : count(0), bufferID(0) {}
 
 IndexBuffer::IndexBuffer(const unsigned int* pIndices, const GLsizei pCount) : count(pCount), bufferID(0) {
@@ -11,7 +9,8 @@ IndexBuffer::IndexBuffer(const unsigned int* pIndices, const GLsizei pCount) : c
 }
 
 IndexBuffer::~IndexBuffer() {
-    glDeleteBuffers(1, &bufferID);
+    if (bufferID != 0)
+        glDeleteBuffers(1, &bufferID);
 }
 
 void IndexBuffer::bind() const {
