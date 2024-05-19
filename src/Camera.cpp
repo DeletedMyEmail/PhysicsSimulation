@@ -1,6 +1,6 @@
-#include "Camera.h"
+#include "../include/Camera.h"
 #include <algorithm>
-#include "Input.h"
+#include "../include/Input.h"
 #include "../libs/glm/ext/matrix_transform.hpp"
 #include "../libs/glm/gtc/matrix_transform.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
