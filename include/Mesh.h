@@ -8,13 +8,16 @@
 
 class Mesh {
 public:
-    explicit Mesh(const char* pFilePath);
+    explicit Mesh(const char* pFilePath, float pAlpha = 1.0f);
+    ~Mesh();
+
     void draw() const;
 private:
-    static Vertex parseVertex(const char* pLine);
-    static void parseFaceIndices(const std::string& line, std::vector<unsigned int>& pIndices);
-    static bool parse(const char* pModelPath, VertexBuffer& pVertexBuffer, IndexBuffer& pIndexBuffer);
+    Vertex parseVertex(const char* pLine) const;
+    void parseFaceIndices(const std::string& line, std::vector<unsigned int>& pIndices);
+    bool parse(const char* pModelPath, VertexBuffer& pVertexBuffer, IndexBuffer& pIndexBuffer);
 private:
     VertexBuffer vertexBuffer;
     IndexBuffer indexBuffer;
+    float alpha;
 };

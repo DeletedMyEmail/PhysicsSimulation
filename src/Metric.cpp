@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-FPSCounter::FPSCounter() : prevTime(0), currTime(glfwGetTime()), deltaTime(0), elaspedTime(0), fps(0), frameCount(0) {}
+FPSCounter::FPSCounter() : prevTime(0), currTime(glfwGetTime()), deltaTime(0), elaspedTime(0), frameCount(0), fps(0) {}
 
 void FPSCounter::update() {
     currTime = glfwGetTime();
@@ -13,18 +13,17 @@ void FPSCounter::update() {
     frameCount++;
 }
 
-double FPSCounter::calcFPS(double& pAVGFrameTime) {
+unsigned int FPSCounter::calcFPS(double& pAVGFrameTime) {
     fps = 1 / elaspedTime * frameCount;
     pAVGFrameTime = elaspedTime / frameCount * 1000;
     frameCount = 0;
     elaspedTime = 0;
     return fps;
-
 }
 
 std::string FPSCounter::calcToString() {
     double lAvgFrameTime;
-    const double lFPS = calcFPS(lAvgFrameTime);
+    const unsigned int lFPS = calcFPS(lAvgFrameTime);
     return "A Simulation | FPS: " + std::to_string(lFPS) + " | AVG Frame Time: " + std::to_string(lAvgFrameTime) + "ms";
 }
 

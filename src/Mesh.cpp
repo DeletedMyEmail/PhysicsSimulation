@@ -3,30 +3,25 @@
 #include <iostream>
 #include <sstream>
 
-Mesh::Mesh(const char* pFilePath) : vertexBuffer(VertexBuffer()), indexBuffer(IndexBuffer()) {
+Mesh::Mesh(const char* pFilePath, float pAlpha) : vertexBuffer(VertexBuffer()), indexBuffer(IndexBuffer()), alpha(pAlpha) {
     if (!parse(pFilePath, vertexBuffer, indexBuffer)) {
         throw std::runtime_error("Could not parse model file.");
     }
 }
 
-void Mesh::draw() const {
-
-    // kein error
-    vertexBuffer.bind();
-    // error
-    indexBuffer.bind();
-    //error
-
-    glDrawElements(GL_TRIANGLES, indexBuffer.getCount(), GL_UNSIGNED_INT, nullptr);
-
-    GLenum error;
-    while ((error = glGetError()) != GL_NO_ERROR) {
-    }
-    // error
+Mesh::~Mesh() {
+    delete &vertexBuffer;
+    delete &indexBuffer;
 }
 
-Vertex Mesh::parseVertex(const char* pLine) {
-    Vertex lVertex{0,0,0,1,0.1,0.5};
+void Mesh::draw() const {
+    vertexBuffer.bind();
+    indexBuffer.bind();
+    glDrawElements(GL_TRIANGLES, indexBuffer.getCount(), GL_UNSIGNED_INT, nullptr);
+}
+
+Vertex Mesh::parseVertex(const char* pLine) const {
+    Vertex lVertex{0,0,0,1,1,1,alpha};
     sscanf(pLine, "v %f %f %f", &lVertex.x, &lVertex.y, &lVertex.z);
     return lVertex;
 }
@@ -79,7 +74,6 @@ bool Mesh::parse(const char* pModelPath, VertexBuffer& pVertexBuffer, IndexBuffe
     // TODO: delete lVerticesArray and lIndicesArray - idk why it crashed when using stack memory
     pVertexBuffer = *new VertexBuffer(lVerticesArray, lVertices.size());
     pIndexBuffer =  *new IndexBuffer(lIndicesArray, lIndices.size());
-
 
     return true;
 }

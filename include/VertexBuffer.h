@@ -4,7 +4,7 @@
 
 typedef struct {
     GLfloat x, y, z;
-    GLfloat r, g, b;
+    GLfloat r, g, b, a;
 } Vertex;
 
 class VertexBuffer {
