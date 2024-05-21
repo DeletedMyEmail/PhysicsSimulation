@@ -4,6 +4,8 @@
 #include "../libs/glm/ext/matrix_transform.hpp"
 #include "../libs/glm/gtc/matrix_transform.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
+#include <sstream>
+
 #include "../libs/glm/gtx/dual_quaternion.hpp"
 
 Camera::Camera(const float pFov, const float pWidth, const float pHeight, const float pNear, const float pFar) :
@@ -80,4 +82,10 @@ void Camera::setSensitive(float pSensitivity) {
 
 float Camera::getSensitive() const {
     return sensitivity;
+}
+
+Camera::operator std::string() const {
+    std::ostringstream lStream;
+    lStream << "Yaw: " << yaw << " Pitch: " << pitch << " Position: " << position.x << " " << position.y << " " << position.z << " LookAt: " << lookAt.x << " " << lookAt.y << " " << lookAt.z;
+    return lStream.str();
 }

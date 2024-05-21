@@ -16,7 +16,7 @@ void Model::scale(glm::vec3 pScale) {
     matrix = glm::scale(matrix, pScale);
 }
 
-void Model::bind() {
+void Model::draw() {
     glUniformMatrix4fv(viewProjectionLocation, 1, GL_FALSE, &viewProjection[0][0]);
     shader->bind();
     mesh->draw();

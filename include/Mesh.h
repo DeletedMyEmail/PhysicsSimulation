@@ -8,9 +8,7 @@
 
 class Mesh {
 public:
-    explicit Mesh(const char* pFilePath, float pAlpha = 1.0f);
-    ~Mesh();
-
+    Mesh(const char* pFilePath, float pAlpha = 1.0f);
     void draw() const;
 private:
     Vertex parseVertex(const char* pLine) const;

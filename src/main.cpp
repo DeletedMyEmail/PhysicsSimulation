@@ -9,6 +9,7 @@
 #include "../include/Model.h"
 #include "../include/Camera.h"
 #include "../include/Input.h"
+#include "../include/PhysicsObj.h"
 
 #include <GLFW/glfw3.h>
 
@@ -19,31 +20,74 @@
 //#define VYSNC
 //#define FULLSCREEN
 
-#define SPEED 2.0f
+#define OBJ_COUNT 3
+#define OBJ_RADIUS 1.0f
+#define CONST_RADIUS 22.0f
+#define G -9.8f
+
 GLFWwindow* glfwSetup();
+
+void applyForces(PhysicsObj pObj[], int pSize) {
+    for (int i = 0; i < pSize; i++) {
+        pObj[i].applyForce(glm::vec3(0,G,0));
+    }
+}
+
+void updatePositions(PhysicsObj pObj[], int pSize, float pDeltaTime, Camera pCam) {
+    for (int i = 0; i < pSize; i++) {
+        pObj[i].updatePos(pDeltaTime);
+        pObj[i].getModel()->calModelViewProj(pCam.getViewPorjection());
+        pObj[i].getModel()->draw();
+    }
+}
+
+void handleConstrains(PhysicsObj pObjs[], int pSize, glm::vec3 pConstCenter, float pConstRadius) {
+    for (int i = 0; i < pSize; i++) {
+        glm::vec3 lToContiner = pConstCenter - pObjs[i].getPosition();
+        float lDist = glm::length(lToContiner);
+        if ((lDist + pObjs[i].getRadius()) > pConstRadius) {
+            glm::vec3 lNorm = lToContiner / lDist;
+            pObjs[i].getPosition() = pConstCenter - lNorm * (pConstRadius - pObjs[i].getRadius());
+        }
+    }
+}
+
+void handleCollisions(PhysicsObj pObj[], int pSize) {
+    for (int i = 0; i < pSize; i++) {
+        for (int j = 0; j < pSize; j++) {
+            pObj[i].collide(pObj[j]);
+        }
+    }
+}
 
 int main() {
     GLFWwindow* window = glfwSetup();
     if (!window)
         return -1;
 
-    const Shader lBasicShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
-    const Mesh lBallMesh("../models/ball.obj");
-    const Mesh lCubeMesh("../models/cube.obj", 0.2);
-
-    Model lModels[4];
-    for (int i = 0; i < 3; i++) {
-        lModels[i] = Model(&lBallMesh, &lBasicShader);
-        lModels[i].translate(glm::vec3(i*1.0f, 0.0f, 0.0f));
-        lModels[i].scale(glm::vec3(0.2));
-    }
-    lModels[3] = Model(&lCubeMesh, &lBasicShader);
-    lModels[3].scale(glm::vec3(4.0f));
-
-    Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
-    lCamera.translate(glm::vec3(0,-8,0));
-
     FPSCounter lFPSCounter;
+    Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
+
+    const Shader lBasicShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
+
+    Mesh* lBallMesh = new Mesh("../models/ball.obj", 0.05f);
+    Model* lContainerModel =  new Model(lBallMesh, &lBasicShader);
+    lContainerModel->scale(glm::vec3(CONST_RADIUS));
+
+    PhysicsObj objs[OBJ_COUNT];
+    for (int i = 0; i < OBJ_COUNT; i++) {
+        Mesh* lMesh = new Mesh("../models/ball.obj");
+        Model* lModel =  new Model(lMesh, &lBasicShader);
+        //lModel->scale(glm::vec3(1));
+        objs[i] = PhysicsObj(lModel, glm::vec3(0.0f), 1.0f);
+        glm::vec3 lRanPos = glm::vec3(rand() % 8, rand() % 8, rand() % 8);
+        objs[i].move(lRanPos);
+    }
+
+    lCamera.pitch = -16;
+    lCamera.yaw = -86;
+    lCamera.position = glm::vec3(-0.7f, 0.6f, -35.0f);
+    lCamera.lookAt = glm::vec3(0.06f, -0.28f, 0.95f);
 
     while(!glfwWindowShouldClose(window)) {
         // metrics
@@ -66,11 +110,16 @@ int main() {
         }
         lCamera.onKeyMovement(window, lFPSCounter.getLastDeltaTime());
         lCamera.update();
+
         // draw
-        for (auto & lModel : lModels) {
-            lModel.calModelViewProj(lCamera.getViewPorjection());
-            lModel.bind();
-        }
+
+        applyForces(objs, OBJ_COUNT);
+        handleConstrains(objs, OBJ_COUNT, glm::vec3(0,0,0), CONST_RADIUS);
+        handleCollisions(objs,OBJ_COUNT);
+        updatePositions(objs, OBJ_COUNT, lFPSCounter.getLastDeltaTime(), lCamera);
+
+        lContainerModel->calModelViewProj(lCamera.getViewPorjection());
+        lContainerModel->draw();
 
         glfwSwapBuffers(window);
     }
@@ -119,8 +168,8 @@ GLFWwindow* glfwSetup() {
         return nullptr;
     }
 
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
+    //glEnable(GL_CULL_FACE);
+    //glFrontFace(GL_CCW);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -1,10 +1,11 @@
 #pragma once
 
+#include <string>
 #include <GLFW/glfw3.h>
 #include "../libs/glm/glm.hpp"
 
-#define DEFAULT_SPEED 2.0f
-#define DEFAULT_SENSITIVITY 0.2f
+#define DEFAULT_SPEED 2.5f
+#define DEFAULT_SENSITIVITY 0.12f
 
 class Camera {
 public:
@@ -15,11 +16,12 @@ public:
     glm::mat4& getViewPorjection();
 
     void onMouseMove(double pRelX, double pRelY);
-
     void onKeyMovement(GLFWwindow* pWindow, double pDeltaTime);
 
     void setSensitive(float pSensitivity);
     float getSensitive() const;
+
+    operator std::string() const;
 private:
     void moveFront(float pAmount);
     void moveSideway(float pAmount);

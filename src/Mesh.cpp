@@ -9,11 +9,6 @@ Mesh::Mesh(const char* pFilePath, float pAlpha) : vertexBuffer(VertexBuffer()), 
     }
 }
 
-Mesh::~Mesh() {
-    delete &vertexBuffer;
-    delete &indexBuffer;
-}
-
 void Mesh::draw() const {
     vertexBuffer.bind();
     indexBuffer.bind();
@@ -21,7 +16,7 @@ void Mesh::draw() const {
 }
 
 Vertex Mesh::parseVertex(const char* pLine) const {
-    Vertex lVertex{0,0,0,1,1,1,alpha};
+    Vertex lVertex{0,0,0,1,0.5,0.2,alpha};
     sscanf(pLine, "v %f %f %f", &lVertex.x, &lVertex.y, &lVertex.z);
     return lVertex;
 }

@@ -6,17 +6,14 @@ in vec4 v_color;
 
 float near = 0.1f;
 float far = 1000.0f;
+float LinearizeDepth(float depth);
 
-float linearizeDepth(float depth) {
-    return (0.5 * near * far) / (far + near - (depth * 2.0 - 1.0) * (far - near));
+void main() {
+    float depth = LinearizeDepth(gl_FragCoord.z) / far;
+    f_color = v_color;
 }
 
-float logisticDepth(float depth, float steepness, float offset) {
-    float zVal = linearizeDepth(depth);
-    return (1 / (1 + exp(-steepness * (zVal - offset))));
-}
-
-void main()  {
-    float depth = logisticDepth(gl_FragCoord.z, 0.5f, 0.5f);
-    f_color = vec4((1.0f- depth) * vec3(0.85f, 0.85f, 0.90f), v_color.a);
+float LinearizeDepth(float depth) {
+    float z = depth * 2.0 - 1.0;
+    return (2.0 * near * far) / (far + near - z * (far - near));
 }

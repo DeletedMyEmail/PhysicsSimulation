@@ -9,7 +9,7 @@ public:
     Model(const Mesh* mesh, const  Shader* shader);
     void rotate(float pDegrees, glm::vec3 pAxis);
     void scale(glm::vec3 pScale);
-    void bind();
+    void draw();
 
     void translate(const glm::vec3& pTranslation);
 
