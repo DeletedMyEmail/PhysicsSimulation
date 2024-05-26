@@ -4,8 +4,8 @@
 #include <GLFW/glfw3.h>
 #include "../libs/glm/glm.hpp"
 
-#define DEFAULT_SPEED 2.5f
-#define DEFAULT_SENSITIVITY 0.12f
+#define DEFAULT_SPEED 6.5f
+#define DEFAULT_SENSITIVITY 0.02f
 
 class Camera {
 public:

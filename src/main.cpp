@@ -14,16 +14,18 @@
 #include <GLFW/glfw3.h>
 
 
-#define WIDTH 1800.0f
-#define HEIGHT 1200.0f
+#define WIDTH 1600.0f
+#define HEIGHT 1000.0f
 #define CATCH_MOUSE
-//#define VYSNC
 //#define FULLSCREEN
+// TODO: disabling vy sync causes random physics violating energy conservation
+#define VYSNC
 
 #define OBJ_COUNT 3
 #define OBJ_RADIUS 1.0f
 #define CONST_RADIUS 22.0f
-#define G -9.8f
+#define G -1.8f
+#define G_CENTRAL 5.0f
 
 GLFWwindow* glfwSetup();
 
@@ -60,6 +62,13 @@ void handleCollisions(PhysicsObj pObj[], int pSize) {
     }
 }
 
+void applyCentralForce(PhysicsObj pObj[], int pSize) {
+    for (int i = 0; i < pSize; i++) {
+        glm::vec3 lToContiner = glm::normalize(glm::vec3(0,0,0) - pObj[i].getPosition());
+        pObj[i].applyForce(lToContiner * G_CENTRAL);
+    }
+}
+
 int main() {
     GLFWwindow* window = glfwSetup();
     if (!window)
@@ -67,6 +76,7 @@ int main() {
 
     FPSCounter lFPSCounter;
     Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
+    lCamera.translate(glm::vec3(0.0,0.0,-38));
 
     const Shader lBasicShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
 
@@ -75,19 +85,14 @@ int main() {
     lContainerModel->scale(glm::vec3(CONST_RADIUS));
 
     PhysicsObj objs[OBJ_COUNT];
-    for (int i = 0; i < OBJ_COUNT; i++) {
-        Mesh* lMesh = new Mesh("../models/ball.obj");
-        Model* lModel =  new Model(lMesh, &lBasicShader);
+    for (auto & obj : objs) {
+        const auto lMesh = new Mesh("../models/ball.obj");
+        const auto lModel =  new Model(lMesh, &lBasicShader);
         //lModel->scale(glm::vec3(1));
-        objs[i] = PhysicsObj(lModel, glm::vec3(0.0f), 1.0f);
-        glm::vec3 lRanPos = glm::vec3(rand() % 8, rand() % 8, rand() % 8);
-        objs[i].move(lRanPos);
-    }
 
-    lCamera.pitch = -16;
-    lCamera.yaw = -86;
-    lCamera.position = glm::vec3(-0.7f, 0.6f, -35.0f);
-    lCamera.lookAt = glm::vec3(0.06f, -0.28f, 0.95f);
+        auto lPos = glm::vec3(rand() % static_cast<int>(OBJ_RADIUS*2) - OBJ_RADIUS, rand() % static_cast<int>(OBJ_RADIUS*2) - OBJ_RADIUS, rand() % static_cast<int>(OBJ_RADIUS*2) - OBJ_RADIUS);
+        obj = PhysicsObj(lModel, lPos, 1.0f);
+    }
 
     while(!glfwWindowShouldClose(window)) {
         // metrics
@@ -112,7 +117,8 @@ int main() {
         lCamera.update();
 
         // draw
-
+        if (KEY_STATES[GLFW_KEY_F])
+            applyCentralForce(objs, OBJ_COUNT);
         applyForces(objs, OBJ_COUNT);
         handleConstrains(objs, OBJ_COUNT, glm::vec3(0,0,0), CONST_RADIUS);
         handleCollisions(objs,OBJ_COUNT);
