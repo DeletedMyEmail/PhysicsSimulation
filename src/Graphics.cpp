@@ -2,6 +2,14 @@
 #include "../include/Input.h"
 #include <iostream>
 
+void cursorEnterCallback(GLFWwindow* window, const int pEntered) {
+    if (pEntered) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    } else {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+}
+
 GLFWwindow* glfwSetup() {
     if (!glfwInit()) {
         return nullptr;
@@ -24,6 +32,7 @@ GLFWwindow* glfwSetup() {
         throw std::runtime_error("Failed to create GLFW window");
     }
 
+    glfwSetCursorEnterCallback(window, cursorEnterCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetMouseButtonCallback(window, mouseKeyCallback);
     glfwSetCursorPosCallback(window, cursorPosCallback);

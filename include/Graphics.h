@@ -6,7 +6,7 @@
 #define WIDTH 1600.0f
 #define HEIGHT 1000.0f
 #define CATCH_MOUSE
-#define FULLSCREEN
+//#define FULLSCREEN
 // TODO: disabling vy sync causes random physics violating energy conservation
 #define VYSNC
 

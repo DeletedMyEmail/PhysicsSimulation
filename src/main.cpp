@@ -1,12 +1,11 @@
 #include <forward_list>
-
 #include "../include/Physics.h"
 #include "../include/Camera.h"
 #include "../include/Graphics.h"
 #include "../include/Metric.h"
 #include "../include/Input.h"
 
-#define MAX_OBJ_COUNT 5000
+#define MAX_OBJ_COUNT 500
 #define OBJ_RADIUS 1.0f
 #define CONST_RADIUS 22
 
@@ -17,7 +16,7 @@ int main() {
     Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
     lCamera.translate(glm::vec3(0,CONST_RADIUS,-32));
 
-    Model* lConstModel = createConstrainModel(CONST_RADIUS, "../shader/BasicVert.glsl", "../shader/BasicFrag.glsl", "../models/ball.obj");
+    Model* lConstModel = createConstrainModel(CONST_RADIUS, "../shader/BasicVert.glsl", "../shader/BasicFrag.glsl", "../models/sphere.obj");
     std::forward_list<PhysicsObj*> lObjs;
     Shader lObjShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
 
@@ -32,12 +31,13 @@ int main() {
             glfwSetWindowTitle(window, lFPSCounter.calcToString().c_str());
         }
 
+        // spawn new obj ever 0.05s
         lCurrentTime = glfwGetTime();
         if (lCurrentTime - lTimeSinceLastSpawn >= 0.05 && lObjCount < MAX_OBJ_COUNT) {
             lTimeSinceLastSpawn = lCurrentTime;
             lObjCount++;
             glm::vec3 lPos = glm::vec3(rand() % CONST_RADIUS - CONST_RADIUS/2, 0, rand() % CONST_RADIUS - CONST_RADIUS/2);
-            lObjs.push_front(createObj(lPos, OBJ_RADIUS,"../models/ball.obj", &lObjShader));
+            lObjs.push_front(createObj(lPos, OBJ_RADIUS,"../models/sphere.obj", &lObjShader));
         }
 
         // clear
