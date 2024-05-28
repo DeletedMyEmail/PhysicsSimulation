@@ -1,42 +1,43 @@
 #include "../include/Physics.h"
 
-void applyForces(PhysicsObj pObj[], const int pSize) {
-    for (int i = 0; i < pSize; i++) {
-        pObj[i].applyForce(glm::vec3(0,G,0));
+void applyForces(const std::forward_list<PhysicsObj*>& pObjs) {
+    for (PhysicsObj* lObj : pObjs) {
+        lObj->applyForce(glm::vec3(0,G,0));
     }
 }
 
-void updateAndDraw(PhysicsObj pObj[], const int pSize, const float pDeltaTime, Camera pCam) {
-    for (int i = 0; i < pSize; i++) {
-        //std::cout << pObj[i].getPosition().x << " " << pObj[i].getPosition().y << " " << pObj[i].getPosition().z << std::endl;
-        pObj[i].updatePos(pDeltaTime);
-        pObj[i].getModel()->calModelViewProj(pCam.getViewPorjection());
-        pObj[i].getModel()->draw();
+void updateAndDraw(const std::forward_list<PhysicsObj*>& pObjs, const float pDeltaTime, Camera pCam) {
+    for (PhysicsObj* lObj : pObjs) {
+        lObj->updatePos(pDeltaTime);
+        lObj->getModel()->calModelViewProj(pCam.getViewPorjection());
+        lObj->getModel()->draw();
     }
 }
 
-void handleConstrains(PhysicsObj pObjs[], const int pSize, const glm::vec3 pConstCenter, const float pConstRadius) {
-    for (int i = 0; i < pSize; i++) {
-        glm::vec3 lToContiner = pConstCenter - pObjs[i].getPosition();
+void handleConstrains(const std::forward_list<PhysicsObj*>& pObjs, const glm::vec3 pConstCenter, const float pConstRadius) {
+    for (PhysicsObj* lObj : pObjs) {
+        glm::vec3 lToContiner = pConstCenter - lObj->getPosition();
         float lDist = glm::length(lToContiner);
-        if ((lDist + pObjs[i].getRadius()) > pConstRadius) {
+        if ((lDist + lObj->getRadius()) > pConstRadius) {
             glm::vec3 lNorm = lToContiner / lDist;
-            pObjs[i].getPosition() = pConstCenter - lNorm * (pConstRadius - pObjs[i].getRadius());
+            glm::vec3 lDif = lNorm * (lDist + lObj->getRadius() - pConstRadius);
+            lObj->getPosition() += lDif;
+            lObj->getModel()->translate(lDif);
         }
     }
 }
 
-void handleCollisions(PhysicsObj pObj[], const int pSize) {
-    for (int i = 0; i < pSize; i++) {
-        for (int j = 0; j < pSize; j++) {
-            pObj[i].collide(pObj[j]);
+void handleCollisions(const std::forward_list<PhysicsObj*>& pObjs) {
+    for (PhysicsObj* lObj : pObjs) {
+        for (PhysicsObj* lObj2 : pObjs) {
+            lObj->collide(*lObj2);
         }
     }
 }
 
-void applyCentralForce(PhysicsObj pObj[], const int pSize) {
-    for (int i = 0; i < pSize; i++) {
-        glm::vec3 lToContiner = glm::normalize(glm::vec3(0,0,0) - pObj[i].getPosition());
-        pObj[i].applyForce(lToContiner * G_CENTRAL);
+void applyCentralForce(const std::forward_list<PhysicsObj*>& pObjs) {
+    for (PhysicsObj* lObj : pObjs) {
+        glm::vec3 lToContiner = glm::normalize(glm::vec3(0,0,0) - lObj->getPosition());
+        lObj->applyForce(lToContiner * G_CENTRAL);
     }
 }

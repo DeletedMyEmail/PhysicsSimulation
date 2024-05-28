@@ -1,4 +1,4 @@
-#include <iostream>
+#include <forward_list>
 
 #include "../include/Physics.h"
 #include "../include/Camera.h"
@@ -6,9 +6,9 @@
 #include "../include/Metric.h"
 #include "../include/Input.h"
 
-#define OBJ_COUNT 5
+#define MAX_OBJ_COUNT 5000
 #define OBJ_RADIUS 1.0f
-#define CONST_RADIUS 22.0f
+#define CONST_RADIUS 22
 
 int main() {
     GLFWwindow* window = glfwSetup();
@@ -17,14 +17,27 @@ int main() {
     Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
     lCamera.translate(glm::vec3(0,CONST_RADIUS,-32));
 
-    PhysicsObj* objs = createObjs(OBJ_COUNT, OBJ_RADIUS, CONST_RADIUS, "../shader/BasicVert.glsl", "../shader/BasicFrag.glsl", "../models/ball.obj");
     Model* lConstModel = createConstrainModel(CONST_RADIUS, "../shader/BasicVert.glsl", "../shader/BasicFrag.glsl", "../models/ball.obj");
+    std::forward_list<PhysicsObj*> lObjs;
+    Shader lObjShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
+
+    double lTimeSinceLastSpawn = glfwGetTime();
+    double lCurrentTime = glfwGetTime();
+    int lObjCount = 0;
 
     while(!glfwWindowShouldClose(window)) {
         // metrics
         lFPSCounter.update();
         if (lFPSCounter.getElapsed() >= 1.0/20) {
             glfwSetWindowTitle(window, lFPSCounter.calcToString().c_str());
+        }
+
+        lCurrentTime = glfwGetTime();
+        if (lCurrentTime - lTimeSinceLastSpawn >= 0.05 && lObjCount < MAX_OBJ_COUNT) {
+            lTimeSinceLastSpawn = lCurrentTime;
+            lObjCount++;
+            glm::vec3 lPos = glm::vec3(rand() % CONST_RADIUS - CONST_RADIUS/2, 0, rand() % CONST_RADIUS - CONST_RADIUS/2);
+            lObjs.push_front(createObj(lPos, OBJ_RADIUS,"../models/ball.obj", &lObjShader));
         }
 
         // clear
@@ -44,11 +57,11 @@ int main() {
 
         // physics & drawing
         if (KEY_STATES[GLFW_KEY_F])
-            applyCentralForce(objs, OBJ_COUNT);
-        applyForces(objs, OBJ_COUNT);
-        handleCollisions(objs,OBJ_COUNT);
-        handleConstrains(objs, OBJ_COUNT, glm::vec3(0,0,0), CONST_RADIUS);
-        updateAndDraw(objs, OBJ_COUNT, static_cast<float>(lFPSCounter.getLastDeltaTime()), lCamera);
+            applyCentralForce(lObjs);
+        applyForces(lObjs);
+        handleCollisions(lObjs);
+        handleConstrains(lObjs, glm::vec3(0,0,0), CONST_RADIUS);
+        updateAndDraw(lObjs, static_cast<float>(lFPSCounter.getLastDeltaTime()), lCamera);
 
         lConstModel->calModelViewProj(lCamera.getViewPorjection());
         lConstModel->draw();

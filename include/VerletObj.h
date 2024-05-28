@@ -2,6 +2,8 @@
 
 #include "Model.h"
 
+#define COLLISION_DAMPING 0.2f
+
 class PhysicsObj {
 public:
     PhysicsObj() = default;

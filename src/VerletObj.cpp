@@ -1,4 +1,4 @@
-#include "../include/PhysicsObj.h"
+#include "../include/VerletObj.h"
 
 PhysicsObj::PhysicsObj(Model* pModel, const glm::vec3& pPosition, float pRadius) : position(pPosition), prePosition(pPosition), acceleration(glm::vec3(0.0f)), radius(pRadius), objIsStatic(false), model(pModel) {
     model->translate(position);
@@ -47,9 +47,13 @@ void PhysicsObj::collide(PhysicsObj& pOther) {
     glm::vec3 lNorm = lColAxis / lDist;
     float lDelta = radius + pOther.getRadius() - lDist;
 
-    position += lNorm * lDelta * 0.5f;
-    if (!pOther.isStatic())
-        pOther.getPosition() -= lNorm * lDelta * 0.5f;
+    glm::vec3 lPosDiff = lNorm * lDelta * COLLISION_DAMPING;
+    position += lPosDiff;
+    model->translate(lPosDiff);
+    if (!pOther.isStatic()) {
+        pOther.getPosition() -= lPosDiff;
+        pOther.getModel()->translate(-lPosDiff);
+    }
 }
 
 void PhysicsObj::move(const glm::vec3& pTranslation) {
