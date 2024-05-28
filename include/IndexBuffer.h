@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../libs/glad/glad.h"
 
 class IndexBuffer {

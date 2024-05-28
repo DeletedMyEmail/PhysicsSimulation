@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Model.h"
-#include "../libs/glm/vec3.hpp"
 
 class PhysicsObj {
 public:
@@ -18,7 +17,7 @@ public:
     Model* getModel() const;
     glm::vec3& getPosition();
     float getRadius() const;
-public:
+private:
     glm::vec3 position;
     glm::vec3 prePosition;
     glm::vec3 acceleration;

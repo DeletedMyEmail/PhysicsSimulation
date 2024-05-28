@@ -1,6 +1,8 @@
 #include "../include/PhysicsObj.h"
 
-PhysicsObj::PhysicsObj(Model* pModel, const glm::vec3& pPosition, float pRadius) : position(pPosition), prePosition(pPosition), acceleration(glm::vec3(0.0f)), radius(pRadius), objIsStatic(false), model(pModel) {}
+PhysicsObj::PhysicsObj(Model* pModel, const glm::vec3& pPosition, float pRadius) : position(pPosition), prePosition(pPosition), acceleration(glm::vec3(0.0f)), radius(pRadius), objIsStatic(false), model(pModel) {
+    model->translate(position);
+}
 
 void PhysicsObj::updatePos(const float pDeltaTime) {
     if (isStatic()) return;

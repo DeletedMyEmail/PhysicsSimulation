@@ -5,7 +5,7 @@
 #include "../libs/glm/glm.hpp"
 
 #define DEFAULT_SPEED 6.5f
-#define DEFAULT_SENSITIVITY 0.02f
+#define DEFAULT_SENSITIVITY 0.20f
 
 class Camera {
 public:
