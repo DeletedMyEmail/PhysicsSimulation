@@ -3,21 +3,24 @@
 
 VertexBuffer::VertexBuffer() : count(0), bufferID(0), vao(0) {}
 
-VertexBuffer::VertexBuffer(const Vertex* pData, const GLsizei pCount) : count(pCount), bufferID(0), vao(0) {
+VertexBuffer::VertexBuffer(const Vertex* pVertices, const GLsizei pCount) : count(pCount), bufferID(0), vao(0) {
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &bufferID);
 
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*pCount, pData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*pCount, pVertices, GL_STATIC_DRAW);
 
-    // specify position attribute for the shader
-    // stride is offset between consecutive vertex attributes
+    // position attribute
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+    // normal attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, r)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, nx)));
+    // color attribute
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, r)));
 
     unbind();
 }

@@ -21,7 +21,7 @@ int main() {
     Shader lObjShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
 
     double lTimeSinceLastSpawn = glfwGetTime();
-    double lCurrentTime = glfwGetTime();
+    double lCurrentTime = 0.0;
     int lObjCount = 0;
 
     while(!glfwWindowShouldClose(window)) {

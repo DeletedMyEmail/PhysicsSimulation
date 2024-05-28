@@ -16,7 +16,7 @@ void Mesh::draw() const {
 }
 
 Vertex Mesh::parseVertex(const char* pLine) const {
-    Vertex lVertex{0,0,0,1,0.5,0.2,alpha};
+    Vertex lVertex{0,0,0,0.0,0.0,0.0,0.6,0.1,0.2,alpha};
     sscanf(pLine, "v %f %f %f", &lVertex.x, &lVertex.y, &lVertex.z);
     return lVertex;
 }
@@ -39,6 +39,10 @@ void Mesh::parseFaceIndices(const std::string& line, std::vector<unsigned int>& 
     }
 }
 
+void setNormals(Vertex& pVertex, const char* pLine) {
+    sscanf(pLine, "vn %f %f %f", &pVertex.nx, &pVertex.ny, &pVertex.nz);
+}
+
 bool Mesh::parse(const char* pModelPath, VertexBuffer& pVertexBuffer, IndexBuffer& pIndexBuffer) {
     std::ifstream lFile(pModelPath);
     if (!lFile) {
@@ -48,14 +52,17 @@ bool Mesh::parse(const char* pModelPath, VertexBuffer& pVertexBuffer, IndexBuffe
 
     std::vector<Vertex> lVertices;
     std::vector<unsigned int> lIndices;
+    unsigned int lVNormalCounter = 0;
 
     std::string lLine;
     while (std::getline(lFile, lLine)) {
-        if (lLine[0] == 'v') {
+        // TODO: bounds checking
+        if (lLine[0] == 'v' && lLine[1] == ' ')
             lVertices.push_back(parseVertex(lLine.c_str()));
-        } else if (lLine[0] == 'f') {
+        else if (lLine[0] == 'v' && lLine[1] == 'n')
+            setNormals(lVertices[lVNormalCounter++], lLine.c_str());
+        else if (lLine[0] == 'f' && lLine[1] == ' ')
             parseFaceIndices(lLine, lIndices);
-        }
     }
 
     lFile.close();

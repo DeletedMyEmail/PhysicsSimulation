@@ -78,7 +78,7 @@ PhysicsObj* createObjs(const size_t pCount, const float pObjRadius, const float 
 
     srand(time(nullptr));
     for (int i = 0; i < pCount; i++) {
-        const auto lMesh = new Mesh(pModelPath);
+        const auto lMesh = new Mesh(pModelPath, 1.0);
         const auto lModel =  new Model(lMesh, lShader);
         lModel->scale(glm::vec3(pObjRadius));
 

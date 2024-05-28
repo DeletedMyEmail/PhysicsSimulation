@@ -15,4 +15,5 @@
 - [Instance rendering](https://learnopengl.com/Advanced-OpenGL/Instancing)
 - Multithreading
 - Chunks or trees for spatial partitioning
+- phong lighting
 - care about destroying objects lol
