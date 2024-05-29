@@ -1,6 +1,8 @@
 # Physics Simulation
 
-![Demo](https://github.com/DeletedMyEmail/SimulationGoesBrr/assets/88390464/b72803cf-f721-49c7-97b2-46d33c5745bf)
+<div align="left">
+  <img align="center" src="https://github.com/DeletedMyEmail/SimulationGoesBrr/assets/88390464/b8334921-acf9-445f-bd8e-af3e12ac98a8" width="350" height="350">
+</div>
 
 ## Synopsis
 
@@ -11,9 +13,7 @@
 ## Feature Demo Videos
 
 ## Roadmap 
-- fix collisions when spawning objects
-- [Instance rendering](https://learnopengl.com/Advanced-OpenGL/Instancing)
 - Multithreading
+- [Instance rendering](https://learnopengl.com/Advanced-OpenGL/Instancing)
 - Chunks or trees for spatial partitioning
-- phong lighting
 - care about destroying objects lol
