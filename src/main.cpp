@@ -5,9 +5,12 @@
 #include "../include/Metric.h"
 #include "../include/Input.h"
 
-#define MAX_OBJ_COUNT 500
+#define MAX_OBJ_COUNT 1
 #define OBJ_RADIUS 1.0f
 #define CONST_RADIUS 22
+#define VERTSHADER_PATH "../shader/BasicVert.glsl"
+#define FRAGSHADER_PATH "../shader/BasicFrag.glsl"
+#define MODEL_PATH "../models/sphere.obj"
 
 int main() {
     GLFWwindow* window = glfwSetup();
@@ -16,9 +19,9 @@ int main() {
     Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
     lCamera.translate(glm::vec3(0,CONST_RADIUS,-32));
 
-    Model* lConstModel = createConstrainModel(CONST_RADIUS, "../shader/BasicVert.glsl", "../shader/BasicFrag.glsl", "../models/sphere.obj");
+    Model* lConstModel = createConstrainModel(CONST_RADIUS, VERTSHADER_PATH, FRAGSHADER_PATH, MODEL_PATH);
     std::forward_list<PhysicsObj*> lObjs;
-    Shader lObjShader("../shader/BasicVert.glsl", "../shader/BasicFrag.glsl");
+    Shader lObjShader(VERTSHADER_PATH, FRAGSHADER_PATH);
 
     double lTimeSinceLastSpawn = glfwGetTime();
     double lCurrentTime = 0.0;

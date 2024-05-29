@@ -53,8 +53,11 @@ GLFWwindow* glfwSetup() {
         throw std::runtime_error("Failed to initialize GLAD");
     }
 
-    //glEnable(GL_CULL_FACE);
-    //glFrontFace(GL_CCW);
+#ifdef CULLING
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+#endif
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -63,10 +66,10 @@ GLFWwindow* glfwSetup() {
 }
 
 Model* createConstrainModel(const float pRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath) {
-    const Shader lShader(pVertexPath, pFragPath);
-    const auto lMesh = new Mesh(pModelPath, 0.1f);
+    const Shader* lShader = new Shader(pVertexPath, pFragPath);
+    const Mesh* lMesh = new Mesh(pModelPath, 0.0f);
 
-    const auto lModel = new Model(lMesh, &lShader);
+    const auto lModel = new Model(lMesh, lShader);
     lModel->scale(glm::vec3(pRadius));
 
     return lModel;
@@ -91,8 +94,8 @@ PhysicsObj* createObjs(const size_t pCount, const float pObjRadius, const float 
     return objs;
 }
 
-PhysicsObj* createObj(glm::vec3 pPos, float pObjRadius, const char* pModelPath, const Shader* lShader) {
-    const auto lMesh = new Mesh(pModelPath);
+PhysicsObj* createObj(const glm::vec3 pPos, const float pObjRadius, const char* pModelPath, const Shader* lShader) {
+    const auto lMesh = new Mesh(pModelPath, 1.0f);
     const auto lModel =  new Model(lMesh, lShader);
     lModel->scale(glm::vec3(pObjRadius));
 

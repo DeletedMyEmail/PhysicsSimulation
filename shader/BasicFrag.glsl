@@ -11,21 +11,19 @@ float far = 1000.0f;
 float LinearizeDepth(float depth);
 
 void main() {
-    vec3 lightColor = vec3(1.0, 1.0, 1.0);
-    vec3 lightPos = vec3(0.0, 20.0, -32.0);
+    vec3 lightColor = vec3(0.5, 0.5, 0.5);
+    vec3 lightPos = vec3(0.0, 20.0, 32.0);
 
     // ambient
-    float ambientStrength = 0.3;
+    float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
 
     // diffuse
     vec3 norm = normalize(v_normal);
-    vec3 lightDir = normalize(lightPos - gl_FragCoord.xyz);
-    float diff = max(dot(norm, lightDir), 0.0);
+    float diff = max(0.0, dot(lightPos, norm));
     vec3 diffuse = diff * lightColor;
 
-
-    vec3 result = (ambient + diffuse) * v_color.rgb;
+    vec3 result = (ambient * 0.0 + diffuse) * v_color.rgb;
     f_color = vec4(result, v_color.a);
 }
 

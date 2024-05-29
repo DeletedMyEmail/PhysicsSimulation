@@ -9,6 +9,7 @@
 //#define FULLSCREEN
 // TODO: disabling vy sync causes random physics violating energy conservation
 #define VYSNC
+//#define CULLING
 
 GLFWwindow* glfwSetup();
 PhysicsObj* createObjs(size_t pCount, float pObjRadius, float pSpawnRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath);

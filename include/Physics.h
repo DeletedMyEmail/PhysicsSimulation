@@ -5,8 +5,8 @@
 #include "VerletObj.h"
 #include "Camera.h"
 
-#define G -9.81f
-#define G_CENTRAL 15.0f
+#define G -12.00f
+#define G_CENTRAL 16.0f
 
 void applyForces(const std::forward_list<PhysicsObj*>& pObjs);
 
