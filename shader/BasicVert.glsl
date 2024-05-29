@@ -10,7 +10,7 @@ out vec3 v_normal;
 uniform mat4 u_modelViewProj;
 
 void main() {
-    v_color = a_color;
     v_normal = a_normal;
     gl_Position = u_modelViewProj * vec4(a_position, 1.0);
+    v_color = a_color;
 }

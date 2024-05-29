@@ -4,21 +4,21 @@
 
 Model::Model() : mesh(nullptr), shader(nullptr) {}
 
-Model::Model(const Mesh* mesh, const Shader* shader) : mesh(mesh), shader(shader), matrix(glm::mat4(1.0f)), viewProjection(glm::mat4(1.0f)), viewProjectionLocation(-1) {
-    viewProjectionLocation = glGetUniformLocation(shader->getShaderId(), "u_modelViewProj");
+Model::Model(const Mesh* pMesh, const Shader* pShader) : mesh(pMesh), shader(pShader), matrix(glm::mat4(1.0f)), viewProjection(glm::mat4(1.0f)), viewProjectionLocation(-1) {
+    viewProjectionLocation = glGetUniformLocation(pShader->getShaderId(), "u_modelViewProj");
 }
 
-void Model::rotate(float pDegrees, glm::vec3 pAxis) {
+void Model::rotate(const float pDegrees, const glm::vec3 pAxis) {
     matrix = glm::rotate(matrix, glm::radians(pDegrees), pAxis);
 }
 
-void Model::scale(glm::vec3 pScale) {
+void Model::scale(const glm::vec3 pScale) {
     matrix = glm::scale(matrix, pScale);
 }
 
 void Model::draw() {
-    glUniformMatrix4fv(viewProjectionLocation, 1, GL_FALSE, &viewProjection[0][0]);
     shader->bind();
+    glUniformMatrix4fv(viewProjectionLocation, 1, GL_FALSE, &viewProjection[0][0]);
     mesh->draw();
 }
 

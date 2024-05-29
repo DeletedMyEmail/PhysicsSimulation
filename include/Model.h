@@ -7,7 +7,7 @@
 class Model {
 public:
     Model();
-    Model(const Mesh* mesh, const  Shader* shader);
+    Model(const Mesh* pMesh, const  Shader* pShader);
     void rotate(float pDegrees, glm::vec3 pAxis);
     void scale(glm::vec3 pScale);
     void draw();

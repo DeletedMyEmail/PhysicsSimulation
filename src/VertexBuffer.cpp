@@ -1,5 +1,6 @@
 #include "../include/VertexBuffer.h"
 #include <cstddef>
+#include <iostream>
 
 VertexBuffer::VertexBuffer() : count(0), bufferID(0), vao(0) {}
 
@@ -22,7 +23,8 @@ VertexBuffer::VertexBuffer(const Vertex* pVertices, const GLsizei pCount) : coun
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, r)));
 
-    unbind();
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -32,7 +34,7 @@ VertexBuffer::~VertexBuffer() {
 }
 
 void VertexBuffer::bind() const {
-    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+    //glBindBuffer(GL_ARRAY_BUFFER, bufferID);
     glBindVertexArray(vao);
 }
 

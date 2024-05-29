@@ -6,7 +6,7 @@
 #include "Camera.h"
 
 #define G -12.00f
-#define G_CENTRAL 16.0f
+#define G_CENTRAL 20.0f
 
 void applyForces(const std::forward_list<PhysicsObj*>& pObjs);
 

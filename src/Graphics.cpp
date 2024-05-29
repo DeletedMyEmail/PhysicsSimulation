@@ -67,7 +67,7 @@ GLFWwindow* glfwSetup() {
 
 Model* createConstrainModel(const float pRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath) {
     const Shader* lShader = new Shader(pVertexPath, pFragPath);
-    const Mesh* lMesh = new Mesh(pModelPath, 0.0f);
+    const Mesh* lMesh = new Mesh(pModelPath, 0.1f);
 
     const auto lModel = new Model(lMesh, lShader);
     lModel->scale(glm::vec3(pRadius));
@@ -81,7 +81,7 @@ PhysicsObj* createObjs(const size_t pCount, const float pObjRadius, const float 
 
     srand(time(nullptr));
     for (int i = 0; i < pCount; i++) {
-        const auto lMesh = new Mesh(pModelPath, 1.0);
+        const auto lMesh = new Mesh(pModelPath);
         const auto lModel =  new Model(lMesh, lShader);
         lModel->scale(glm::vec3(pObjRadius));
 

@@ -5,11 +5,12 @@
 #include "../include/Metric.h"
 #include "../include/Input.h"
 
-#define MAX_OBJ_COUNT 1
+#define MAX_OBJ_COUNT 400
 #define OBJ_RADIUS 1.0f
 #define CONST_RADIUS 22
-#define VERTSHADER_PATH "../shader/BasicVert.glsl"
-#define FRAGSHADER_PATH "../shader/BasicFrag.glsl"
+#define VERT_SHADER_PATH "../shader/BasicVert.glsl"
+#define DIFFUSE_FRAG_SHADER_PATH "../shader/DiffuseFrag.glsl"
+#define BASIC_FRAG_SHADER "../shader/BasicFrag.glsl"
 #define MODEL_PATH "../models/sphere.obj"
 
 int main() {
@@ -19,9 +20,9 @@ int main() {
     Camera lCamera(90.0f, WIDTH, HEIGHT, 0.1f, 1000.0f);
     lCamera.translate(glm::vec3(0,CONST_RADIUS,-32));
 
-    Model* lConstModel = createConstrainModel(CONST_RADIUS, VERTSHADER_PATH, FRAGSHADER_PATH, MODEL_PATH);
+    Model* lConstModel = createConstrainModel(CONST_RADIUS, VERT_SHADER_PATH, BASIC_FRAG_SHADER, MODEL_PATH);
     std::forward_list<PhysicsObj*> lObjs;
-    Shader lObjShader(VERTSHADER_PATH, FRAGSHADER_PATH);
+    Shader lObjShader(VERT_SHADER_PATH, DIFFUSE_FRAG_SHADER_PATH);
 
     double lTimeSinceLastSpawn = glfwGetTime();
     double lCurrentTime = 0.0;
@@ -31,7 +32,8 @@ int main() {
         // metrics
         lFPSCounter.update();
         if (lFPSCounter.getElapsed() >= 1.0/20) {
-            glfwSetWindowTitle(window, lFPSCounter.calcToString().c_str());
+            std::string lTitle = lFPSCounter.calcToString() + " | Verlet Particles: " + std::to_string(lObjCount);
+            glfwSetWindowTitle(window, lTitle.c_str());
         }
 
         // spawn new obj ever 0.05s
@@ -40,7 +42,7 @@ int main() {
             lTimeSinceLastSpawn = lCurrentTime;
             lObjCount++;
             glm::vec3 lPos = glm::vec3(rand() % CONST_RADIUS - CONST_RADIUS/2, 0, rand() % CONST_RADIUS - CONST_RADIUS/2);
-            lObjs.push_front(createObj(lPos, OBJ_RADIUS,"../models/sphere.obj", &lObjShader));
+            lObjs.push_front(createObj(lPos, OBJ_RADIUS,MODEL_PATH, &lObjShader));
         }
 
         // clear

@@ -16,7 +16,7 @@ void Mesh::draw() const {
 }
 
 Vertex Mesh::parseVertex(const char* pLine) const {
-    Vertex lVertex{0,0,0,0.0,0.0,0.0,0.51,0.5,0.5,alpha};
+    Vertex lVertex{0,0,0,0.0,0.0,0.0,0.54,0.5,0.5,alpha};
 
     sscanf(pLine, "v %f %f %f", &lVertex.x, &lVertex.y, &lVertex.z);
     return lVertex;
