@@ -27,19 +27,19 @@ void Camera::translate(const glm::vec3& pTranslation) {
 }
 
 void Camera::onKeyMovement(GLFWwindow* pWindow, double pDeltaTime) {
-    if (KEY_STATES[GLFW_KEY_ESCAPE])
+    if (KEY_STATES.at(GLFW_KEY_ESCAPE))
         glfwSetWindowShouldClose(pWindow, true);
-    if (KEY_STATES[GLFW_KEY_W])
+    if (KEY_STATES.at(GLFW_KEY_W))
         moveFront(pDeltaTime * -speed);
-    if (KEY_STATES[GLFW_KEY_S])
+    if (KEY_STATES.at(GLFW_KEY_S))
         moveFront(pDeltaTime * speed);
-    if (KEY_STATES[GLFW_KEY_A])
+    if (KEY_STATES.at(GLFW_KEY_A))
         moveSideway(pDeltaTime * speed);
-    if (KEY_STATES[GLFW_KEY_D])
+    if (KEY_STATES.at(GLFW_KEY_D))
         moveSideway(pDeltaTime * -speed);
-    if (KEY_STATES[GLFW_KEY_SPACE])
+    if (KEY_STATES.at(GLFW_KEY_SPACE))
         moveUp(pDeltaTime * -speed);
-    if (KEY_STATES[GLFW_KEY_LEFT_SHIFT])
+    if (KEY_STATES.at(GLFW_KEY_LEFT_SHIFT))
         moveUp(pDeltaTime * speed);
 }
 

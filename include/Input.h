@@ -12,7 +12,8 @@ inline std::unordered_map<int, bool> KEY_STATES = {
     {GLFW_KEY_D, false},
     {GLFW_KEY_SPACE, false},
     {GLFW_KEY_LEFT_SHIFT, false},
-    {GLFW_KEY_F, false}
+    {GLFW_KEY_F, false},
+    {GLFW_KEY_ESCAPE, false}
 };
 
 inline bool mouseMoved = false;

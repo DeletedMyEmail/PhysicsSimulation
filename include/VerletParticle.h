@@ -4,13 +4,13 @@
 
 #define COLLISION_DAMPING 0.2f
 
-class PhysicsObj {
+class VerletParticle {
 public:
-    PhysicsObj() = default;
-    PhysicsObj(Model* model, const glm::vec3& pPosition, float pRadius);
+    VerletParticle() = default;
+    VerletParticle(Model* model, const glm::vec3& pPosition, float pRadius);
     void updatePos(float pDeltaTime);
     void applyForce(const glm::vec3& pForce);
-    void collide(PhysicsObj& pOther);
+    void collide(VerletParticle& pOther);
     void move(const glm::vec3& pTranslation);
 
     void setStatic(bool pIsStatic);
@@ -18,6 +18,7 @@ public:
     void setPosition(const glm::vec3& pPosition);
     Model* getModel() const;
     glm::vec3& getPosition();
+    glm::vec3& getPrevPosition();
     float getRadius() const;
 private:
     glm::vec3 position;
@@ -28,3 +29,6 @@ private:
 
     Model* model;
 };
+
+VerletParticle* createObjs(size_t pCount, float pObjRadius, float pSpawnRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath);
+VerletParticle* createObj(glm::vec3 pPos, float pObjRadius, const char* pModelPath, const Shader* lShader);

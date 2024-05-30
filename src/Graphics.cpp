@@ -3,11 +3,14 @@
 #include <iostream>
 
 void cursorEnterCallback(GLFWwindow* window, const int pEntered) {
+#ifdef CATCH_MOUSE
     if (pEntered) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     } else {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
+#endif
+
 }
 
 GLFWwindow* glfwSetup() {
@@ -73,31 +76,4 @@ Model* createConstrainModel(const float pRadius, const char* pVertexPath, const 
     lModel->scale(glm::vec3(pRadius));
 
     return lModel;
-}
-
-PhysicsObj* createObjs(const size_t pCount, const float pObjRadius, const float pSpawnRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath) {
-    const Shader* lShader = new Shader(pVertexPath, pFragPath);
-    const auto objs = new PhysicsObj[pCount];
-
-    srand(time(nullptr));
-    for (int i = 0; i < pCount; i++) {
-        const auto lMesh = new Mesh(pModelPath);
-        const auto lModel =  new Model(lMesh, lShader);
-        lModel->scale(glm::vec3(pObjRadius));
-
-        auto lPos = glm::vec3(rand(), rand(), rand());
-        lPos = glm::normalize(lPos) * (0.0f + rand() % static_cast<int>(pSpawnRadius - pObjRadius));
-
-        objs[i] = *new PhysicsObj(lModel, lPos, pObjRadius);
-    }
-
-    return objs;
-}
-
-PhysicsObj* createObj(const glm::vec3 pPos, const float pObjRadius, const char* pModelPath, const Shader* lShader) {
-    const auto lMesh = new Mesh(pModelPath, 1.0f);
-    const auto lModel =  new Model(lMesh, lShader);
-    lModel->scale(glm::vec3(pObjRadius));
-
-    return new PhysicsObj(lModel, pPos, pObjRadius);
 }

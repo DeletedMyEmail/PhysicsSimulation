@@ -21,7 +21,7 @@ int main() {
     lCamera.translate(glm::vec3(0,CONST_RADIUS,-32));
 
     Model* lConstModel = createConstrainModel(CONST_RADIUS, VERT_SHADER_PATH, BASIC_FRAG_SHADER, MODEL_PATH);
-    std::forward_list<PhysicsObj*> lObjs;
+    std::forward_list<VerletParticle*> lObjs;
     Shader lObjShader(VERT_SHADER_PATH, DIFFUSE_FRAG_SHADER_PATH);
 
     double lTimeSinceLastSpawn = glfwGetTime();
