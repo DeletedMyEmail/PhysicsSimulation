@@ -1,7 +1,7 @@
 # Physics Simulation
 
 <div align="left">
-  <img align="center" src="https://github.com/DeletedMyEmail/SimulationGoesBrr/assets/88390464/b8334921-acf9-445f-bd8e-af3e12ac98a8" width="350" height="350">
+  <img align="center" src="https://github.com/DeletedMyEmail/SimulationGoesBrr/assets/88390464/c355fe07-b8dc-423a-b5aa-4415d5ea8103" width="350" height="350">
 </div>
 
 ## Synopsis
