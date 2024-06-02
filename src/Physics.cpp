@@ -1,43 +1,41 @@
 #include "../include/Physics.h"
 
-void applyForces(const std::forward_list<VerletParticle*>& pObjs) {
-    for (VerletParticle* lObj : pObjs) {
-        lObj->applyForce(glm::vec3(0,G,0));
+#include <list>
+
+#include "../include/Constants.h"
+#include "../include/Input.h"
+
+void applyForces(VerletParticle* pParticle) {
+    pParticle->applyForce(glm::vec3(0,G,0));
+
+    if (KEY_STATES[GLFW_KEY_F])
+        applyCentralForce(pParticle);
+}
+
+void updateAndDraw(VerletParticle* pParticle, const float pDeltaTime, Camera pCam) {
+    pParticle->updatePos(pDeltaTime);
+    pParticle->getModel()->calModelViewProj(pCam.getViewPorjection());
+    pParticle->getModel()->draw();
+}
+
+void handleConstrains(VerletParticle* pParticle, const glm::vec3 pConstCenter, const float pConstRadius) {
+    const glm::vec3 lToContiner = pConstCenter - pParticle->getPosition();
+    const float lDist = glm::length(lToContiner);
+    if ((lDist + pParticle->getRadius()) > pConstRadius) {
+        const glm::vec3 lNorm = lToContiner / lDist;
+        const glm::vec3 lDif = lNorm * (lDist + pParticle->getRadius() - pConstRadius);
+        pParticle->getPosition() += lDif;
+        pParticle->getModel()->translate(lDif);
     }
 }
 
-void updateAndDraw(const std::forward_list<VerletParticle*>& pObjs, const float pDeltaTime, Camera pCam) {
-    for (VerletParticle* lObj : pObjs) {
-        lObj->updatePos(pDeltaTime);
-        lObj->getModel()->calModelViewProj(pCam.getViewPorjection());
-        lObj->getModel()->draw();
+void handleCollisions(const std::list<VerletParticle*>& pParticlesInChunk, VerletParticle* pParticle) {
+    for (VerletParticle* lParticle : pParticlesInChunk) {
+        pParticle->collide(*lParticle);
     }
 }
 
-void handleConstrains(const std::forward_list<VerletParticle*>& pObjs, const glm::vec3 pConstCenter, const float pConstRadius) {
-    for (VerletParticle* lObj : pObjs) {
-        glm::vec3 lToContiner = pConstCenter - lObj->getPosition();
-        float lDist = glm::length(lToContiner);
-        if ((lDist + lObj->getRadius()) > pConstRadius) {
-            glm::vec3 lNorm = lToContiner / lDist;
-            glm::vec3 lDif = lNorm * (lDist + lObj->getRadius() - pConstRadius);
-            lObj->getPosition() += lDif;
-            lObj->getModel()->translate(lDif);
-        }
-    }
-}
-
-void handleCollisions(const std::forward_list<VerletParticle*>& pObjs) {
-    for (VerletParticle* lObj : pObjs) {
-        for (VerletParticle* lObj2 : pObjs) {
-            lObj->collide(*lObj2);
-        }
-    }
-}
-
-void applyCentralForce(const std::forward_list<VerletParticle*>& pObjs) {
-    for (VerletParticle* lObj : pObjs) {
-        glm::vec3 lToContiner = glm::normalize(glm::vec3(0,0,0) - lObj->getPosition());
-        lObj->applyForce(lToContiner * G_CENTRAL);
-    }
+void applyCentralForce(VerletParticle* pParticle) {
+    const glm::vec3 lToContiner = glm::normalize(glm::vec3(0,0,0) - pParticle->getPosition());
+    pParticle->applyForce(lToContiner * G_CENTRAL);
 }

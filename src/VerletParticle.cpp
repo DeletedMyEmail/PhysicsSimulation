@@ -1,5 +1,5 @@
 #include "../include/VerletParticle.h"
-
+#include "../include/Constants.h"
 #include <ctime>
 
 VerletParticle::VerletParticle(Model* pModel, const glm::vec3& pPosition, float pRadius) : position(pPosition), prePosition(pPosition), acceleration(glm::vec3(0.0f)), radius(pRadius), objIsStatic(false), model(pModel) {
@@ -50,10 +50,10 @@ void VerletParticle::collide(VerletParticle& pOther) {
 
     if (lDist >= radius + pOther.getRadius()) return;
 
-    glm::vec3 lNorm = lColAxis / lDist;
-    float lDelta = radius + pOther.getRadius() - lDist;
+    const glm::vec3 lNorm = lColAxis / lDist;
+    const float lDelta = radius + pOther.getRadius() - lDist;
+    const glm::vec3 lPosDiff = lNorm * lDelta * COLLISION_DAMPING;
 
-    glm::vec3 lPosDiff = lNorm * lDelta * COLLISION_DAMPING;
     position += lPosDiff;
     model->translate(lPosDiff);
     if (!pOther.isStatic()) {
@@ -95,7 +95,7 @@ VerletParticle* createObjs(const size_t pCount, const float pObjRadius, const fl
     return objs;
 }
 
-VerletParticle* createObj(const glm::vec3 pPos, const float pObjRadius, const char* pModelPath, const Shader* lShader) {
+VerletParticle* createParticle(const glm::vec3 pPos, const float pObjRadius, const char* pModelPath, const Shader* lShader) {
     const auto lMesh = new Mesh(pModelPath, 1.0f);
     const auto lModel =  new Model(lMesh, lShader);
     lModel->scale(glm::vec3(pObjRadius));

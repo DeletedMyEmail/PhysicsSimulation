@@ -1,5 +1,6 @@
 #include "../include/Graphics.h"
 #include "../include/Input.h"
+#include "../include/Constants.h"
 #include <iostream>
 
 void cursorEnterCallback(GLFWwindow* window, const int pEntered) {

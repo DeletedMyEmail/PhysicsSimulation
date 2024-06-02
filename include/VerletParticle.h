@@ -2,8 +2,6 @@
 
 #include "Model.h"
 
-#define COLLISION_DAMPING 0.2f
-
 class VerletParticle {
 public:
     VerletParticle() = default;
@@ -31,4 +29,4 @@ private:
 };
 
 VerletParticle* createObjs(size_t pCount, float pObjRadius, float pSpawnRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath);
-VerletParticle* createObj(glm::vec3 pPos, float pObjRadius, const char* pModelPath, const Shader* lShader);
+VerletParticle* createParticle(glm::vec3 pPos, float pObjRadius, const char* pModelPath, const Shader* lShader);
