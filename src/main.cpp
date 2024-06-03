@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "../include/Physics.h"
 #include "../include/Camera.h"
 #include "../include/Graphics.h"
@@ -11,14 +10,14 @@ void processParticles(const Camera& lCamera, const FPSCounter& lFPSCounter) {
     for (VerletParticle* lParticle : particles) {
         if (lParticle == nullptr) continue;
 
-        ChunkPosition lChunkPos = getChunkPos(lParticle->getPosition());
-        std::list<VerletParticle*>& lChunk = getChunk(lChunkPos);
+        glm::vec3 lChunkPos = getChunkPos(lParticle->getPosition());
+        std::list<std::list<VerletParticle*>*> lRelChunks = getChunksInRadius(lChunkPos, lParticle->getPosition(), PARTICLE_RADIUS);
 
         applyForces(lParticle);
         handleConstrains(lParticle, glm::vec3(0,0,0), CONSTRAIN_RADIUS);
-        handleCollisions(lChunk, lParticle);
+        handleCollisions(lRelChunks, lParticle);
         updateAndDraw(lParticle, static_cast<float>(lFPSCounter.getLastDeltaTime()), lCamera);
-        updateChunk(lParticle, lChunk);
+        updateChunk(lParticle, chunks[lChunkPos]);
     }
 }
 

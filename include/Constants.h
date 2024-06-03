@@ -1,17 +1,17 @@
 #pragma once
 
 // particles
-#define MAX_PARTICLE_COUNT 2
+#define MAX_PARTICLE_COUNT 200
 #define PARTICLE_RADIUS 1.0f
 
 // physics
 #define COLLISION_DAMPING 0.4f
 #define G -12.00f
 #define G_CENTRAL 20.0f
-#define CONSTRAIN_RADIUS 22
+#define CONSTRAIN_RADIUS 30
 
 // partitioning
-inline constexpr float CHUNK_SIZE = PARTICLE_RADIUS*2.0f;
+inline constexpr float CHUNK_SIZE = PARTICLE_RADIUS*3.0f;
 inline constexpr unsigned int CHUNKS_PER_DIMENSION = CONSTRAIN_RADIUS*2 / CHUNK_SIZE;
 
 // paths

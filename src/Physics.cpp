@@ -21,7 +21,7 @@ void updateAndDraw(VerletParticle* pParticle, const float pDeltaTime, Camera pCa
 void handleConstrains(VerletParticle* pParticle, const glm::vec3 pConstCenter, const float pConstRadius) {
     const glm::vec3 lToContiner = pConstCenter - pParticle->getPosition();
     const float lDist = glm::length(lToContiner);
-    if ((lDist + pParticle->getRadius()) > pConstRadius) {
+    if (lDist + pParticle->getRadius() > pConstRadius) {
         const glm::vec3 lNorm = lToContiner / lDist;
         const glm::vec3 lDif = lNorm * (lDist + pParticle->getRadius() - pConstRadius);
         pParticle->getPosition() += lDif;
@@ -29,9 +29,11 @@ void handleConstrains(VerletParticle* pParticle, const glm::vec3 pConstCenter, c
     }
 }
 
-void handleCollisions(const std::list<VerletParticle*>& pParticlesInChunk, VerletParticle* pParticle) {
-    for (VerletParticle* lParticle : pParticlesInChunk) {
-        pParticle->collide(*lParticle);
+void handleCollisions(const std::list<std::list<VerletParticle*>*>& pChunks, VerletParticle* pParticle) {
+    for (const std::list<VerletParticle*>* lChunk : pChunks) {
+        for (VerletParticle* lParticle : *lChunk) {
+            pParticle->collide(*lParticle);
+        }
     }
 }
 

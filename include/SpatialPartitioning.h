@@ -1,20 +1,23 @@
 #pragma once
 
 #include <list>
-
+#include <unordered_map>
 #include "VerletParticle.h"
 #include "Constants.h"
 
-typedef struct ChunkPosition{
-    size_t x, y, z;
-    bool operator==(const ChunkPosition& pOther) const;
-    inline bool operator!=(const ChunkPosition& chunk_position) const;
-} ChunkPosition;
+struct Vec3Hash {
+    std::size_t operator()(const glm::vec3& vec) const {
+        const std::size_t h1 = std::hash<float>()(vec.x);
+        const std::size_t h2 = std::hash<float>()(vec.y);
+        const std::size_t h3 = std::hash<float>()(vec.z);
+        return h1 ^ (h2 << 1) ^ (h3 << 2);
+    }
+};
 
-inline std::list<VerletParticle*> chunks[CHUNKS_PER_DIMENSION][CHUNKS_PER_DIMENSION][CHUNKS_PER_DIMENSION];
+inline std::unordered_map<glm::vec3, std::list<VerletParticle*>, Vec3Hash> chunks(CHUNKS_PER_DIMENSION);
 inline std::list<VerletParticle*> particles;
 
-ChunkPosition getChunkPos(glm::vec3 pPos);
-std::list<VerletParticle*>& getChunk(const ChunkPosition& pChunkPos);
+glm::vec3 getChunkPos(glm::vec3 pPos);
+std::list<std::list<VerletParticle*>*> getChunksInRadius(const glm::vec3& pChunkPos, const glm::vec3& pPos, float pRadius);
 void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk);
 void spawnParticle(VerletParticle* pParticle);
