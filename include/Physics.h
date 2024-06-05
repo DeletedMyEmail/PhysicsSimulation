@@ -7,7 +7,7 @@
 
 void applyForces(VerletParticle* pParticle);
 
-void updateAndDraw(VerletParticle* pParticle, float pDeltaTime, Camera pCam);
+void updateAndDraw(VerletParticle* pParticle, float pDeltaTime, const glm::mat4& pViewProj);
 
 void handleConstrains(VerletParticle* pParticle, glm::vec3 pConstCenter, float pConstRadius);
 

@@ -1,11 +1,12 @@
 #include "../include/Camera.h"
 #include <algorithm>
-#include "../include/Input.h"
 #include "../libs/glm/ext/matrix_transform.hpp"
 #include "../libs/glm/gtc/matrix_transform.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <sstream>
+#include <unordered_map>
 
+#include "../include/Input.h"
 #include "../libs/glm/gtx/dual_quaternion.hpp"
 
 Camera::Camera(const float pFov, const float pWidth, const float pHeight, const float pNear, const float pFar) :
@@ -13,10 +14,10 @@ Camera::Camera(const float pFov, const float pWidth, const float pHeight, const 
     view(glm::mat4(1.0f)),
     yaw(0.0f),
     pitch(0.0f),
-    sensitivity(DEFAULT_SENSITIVITY),
+    sensitivity(0.2f),
     lookAt(glm::vec3(0.0f)),
     position(glm::vec3(0.0f)),
-    speed(DEFAULT_SPEED)
+    speed(6.5f)
 {
     update();
 }
@@ -26,20 +27,21 @@ void Camera::translate(const glm::vec3& pTranslation) {
     position += -1.0f*pTranslation;
 }
 
-void Camera::onKeyMovement(GLFWwindow* pWindow, double pDeltaTime) {
-    if (KEY_STATES.at(GLFW_KEY_ESCAPE))
-        glfwSetWindowShouldClose(pWindow, true);
-    if (KEY_STATES.at(GLFW_KEY_W))
+void Camera::move(const float pDeltaTime) {
+    if (Input::isKeyPressed(GLFW_KEY_ESCAPE))
+        // TODO: stop window
+        return;
+    if (Input::isKeyPressed(GLFW_KEY_W))
         moveFront(pDeltaTime * -speed);
-    if (KEY_STATES.at(GLFW_KEY_S))
+    if (Input::isKeyPressed(GLFW_KEY_S))
         moveFront(pDeltaTime * speed);
-    if (KEY_STATES.at(GLFW_KEY_A))
+    if (Input::isKeyPressed(GLFW_KEY_A))
         moveSideway(pDeltaTime * speed);
-    if (KEY_STATES.at(GLFW_KEY_D))
+    if (Input::isKeyPressed(GLFW_KEY_D))
         moveSideway(pDeltaTime * -speed);
-    if (KEY_STATES.at(GLFW_KEY_SPACE))
+    if (Input::isKeyPressed(GLFW_KEY_SPACE))
         moveUp(pDeltaTime * -speed);
-    if (KEY_STATES.at(GLFW_KEY_LEFT_SHIFT))
+    if (Input::isKeyPressed(GLFW_KEY_LEFT_SHIFT))
         moveUp(pDeltaTime * speed);
 }
 

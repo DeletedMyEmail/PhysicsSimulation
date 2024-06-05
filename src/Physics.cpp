@@ -1,20 +1,18 @@
 #include "../include/Physics.h"
-
 #include <list>
-
 #include "../include/Constants.h"
 #include "../include/Input.h"
 
 void applyForces(VerletParticle* pParticle) {
     pParticle->applyForce(glm::vec3(0,G,0));
 
-    if (KEY_STATES[GLFW_KEY_F])
+    if (Input::isKeyPressed(GLFW_KEY_F))
         applyCentralForce(pParticle);
 }
 
-void updateAndDraw(VerletParticle* pParticle, const float pDeltaTime, Camera pCam) {
+void updateAndDraw(VerletParticle* pParticle, const float pDeltaTime, const glm::mat4& pViewProj) {
     pParticle->updatePos(pDeltaTime);
-    pParticle->getModel()->calModelViewProj(pCam.getViewPorjection());
+    pParticle->getModel()->calModelViewProj(pViewProj);
     pParticle->getModel()->draw();
 }
 
