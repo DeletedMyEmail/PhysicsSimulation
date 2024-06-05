@@ -22,6 +22,8 @@ public:
     void setMouseKeyCallback(GLFWmousebuttonfun pCallbackFun);
     void setCursorPosCallback(GLFWcursorposfun pCallbackFun);
     void setWindowFocusCallback(GLFWcursorenterfun pCallbackFun);
+    void setCloseCallback(GLFWwindowclosefun pCallbackFun);
+
     bool isRunning() const;
     void stop();
     WindowSetting getSettings() const;
@@ -29,7 +31,8 @@ public:
     Camera& getCamera();
 private:
     GLFWwindow* mWindow;
-    Camera mCamera;
     WindowSetting mSettings;
+    Camera mCamera;
+    std::pair<double, double> mLastCursorPos;
     bool mRunning;
 };

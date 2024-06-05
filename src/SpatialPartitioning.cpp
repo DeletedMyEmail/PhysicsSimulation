@@ -46,12 +46,5 @@ std::list<std::list<VerletParticle*>*> getChunksInRadius(const glm::vec3& pChunk
         }
     }
 
-    for (std::list<VerletParticle*>* lChunk : lRelChunks) {
-
-            std::cout << lChunk->size() << std::endl;
-
-    }
-    std::cout << std::endl;
-
     return lRelChunks;
 }

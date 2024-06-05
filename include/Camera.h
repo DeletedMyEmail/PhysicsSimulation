@@ -14,8 +14,8 @@ public:
     void update();
     glm::mat4& getViewPorjection();
 
-    void onMouseMove(double pRelX, double pRelY);
-    void move(float pDeltaTime);
+    void processCursorMovement(double pRelX, double pRelY);
+    void processKeyInput(float pDeltaTime);
 
     void setSensitive(float pSensitivity);
     float getSensitive() const;

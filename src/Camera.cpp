@@ -27,7 +27,7 @@ void Camera::translate(const glm::vec3& pTranslation) {
     position += -1.0f*pTranslation;
 }
 
-void Camera::move(const float pDeltaTime) {
+void Camera::processKeyInput(const float pDeltaTime) {
     if (Input::isKeyPressed(GLFW_KEY_ESCAPE))
         // TODO: stop window
         return;
@@ -66,7 +66,7 @@ glm::mat4& Camera::getViewPorjection() {
     return viewProjection;
 }
 
-void Camera::onMouseMove(double pRelX, double pRelY) {
+void Camera::processCursorMovement(double pRelX, double pRelY) {
     yaw += pRelX * sensitivity;
     pitch -= pRelY * sensitivity;
     pitch = std::clamp(pitch, -89.0, 89.0);

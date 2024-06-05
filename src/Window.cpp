@@ -1,5 +1,9 @@
 #include "../libs/glad/glad.h"
 #include "../include/Window.h"
+
+#include <iostream>
+
+#include "../include/Input.h"
 #include <stdexcept>
 #include "../include/Constants.h"
 
@@ -8,7 +12,9 @@ GLFWwindow* glfwSetup(const WindowSetting& pSettings);
 Window::Window(const WindowSettings& pSettings) :
     mWindow(glfwSetup(pSettings)),
     mSettings(pSettings),
-    mCamera(Camera(90.0f, pSettings.width, pSettings.height, 0.1f, 1000.0f))
+    mCamera(Camera(90.0f, pSettings.width, pSettings.height, 0.1f, 1000.0f)),
+    mLastCursorPos(Input::getMousePosition()),
+    mRunning(true)
 {
     mCamera.translate(glm::vec3(0,CONSTRAIN_RADIUS,-CONSTRAIN_RADIUS*1.5f));
 }
@@ -19,8 +25,11 @@ void Window::update(const double pDelaTime) {
     glClearColor(0.07f, 0.14f, 0.17f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // todo: MOUSE MOVEMENT
-    mCamera.move(static_cast<float>(pDelaTime));
+    const std::pair<double,double> lCursorPos = Input::getMousePosition();;
+    if (lCursorPos.first != mLastCursorPos.first || lCursorPos.second != mLastCursorPos.second)
+        mCamera.processCursorMovement(lCursorPos.first - mLastCursorPos.first, lCursorPos.second - mLastCursorPos.second);
+    mLastCursorPos = lCursorPos;
+    mCamera.processKeyInput(static_cast<float>(pDelaTime));
     mCamera.update();
 }
 
@@ -40,6 +49,10 @@ void Window::setCursorPosCallback(const GLFWcursorposfun pCallbackFun) {
 
 void Window::setWindowFocusCallback(const GLFWcursorenterfun pCallbackFun) {
     glfwSetCursorEnterCallback(mWindow, pCallbackFun);
+}
+
+void Window::setCloseCallback(GLFWwindowclosefun pCallbackFun) {
+    glfwSetWindowCloseCallback(mWindow, pCallbackFun);
 }
 
 bool Window::isRunning() const {
@@ -63,7 +76,6 @@ Camera& Window::getCamera() {
 }
 
 GLFWwindow* glfwSetup(const WindowSetting& pSettings) {
-
     if (!glfwInit()) {
         return nullptr;
     }
@@ -92,6 +104,8 @@ GLFWwindow* glfwSetup(const WindowSetting& pSettings) {
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         throw std::runtime_error("Failed to initialize GLAD");
     }
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!pSettings.vysnc) {
         glfwSwapInterval(0);

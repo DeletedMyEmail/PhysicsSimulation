@@ -4,7 +4,7 @@
 #include "../include/Physics.h"
 #include "../include/SpatialPartitioning.h"
 
-Simulation::Simulation() : mWindow(Window({1280.0f, 720.0f, "A Simulation", false, false, true})) {
+Simulation::Simulation() : mWindow(Window({1920.0f, 1080.0f, "A Simulation", false, false, true})) {
     mWindow.setWindowFocusCallback([](GLFWwindow* pWindow, const int pEntered) {
         if (pEntered) {
             glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
