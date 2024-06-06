@@ -1,6 +1,3 @@
-//
-// Created by joshua on 6/5/24.
-//
 #pragma once
 #include <utility>
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <GLFW/glfw3.h>
 #include "Camera.h"
 
 typedef struct WindowSetting {

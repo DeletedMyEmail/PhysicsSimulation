@@ -47,5 +47,10 @@ std::list<std::list<VerletParticle*>*> getChunksInRadius(const glm::vec3& pChunk
         }
     }
 
+    // TODO: wtf 73 in 1 chunk?
+    for (const auto lChunk : lRelChunks) {
+        LOG_INFO(lChunk->size());
+    }
+
     return lRelChunks;
 }

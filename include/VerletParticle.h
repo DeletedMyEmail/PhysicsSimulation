@@ -19,14 +19,13 @@ public:
     glm::vec3& getPrevPosition();
     float getRadius() const;
 private:
-    glm::vec3 position;
-    glm::vec3 prePosition;
-    glm::vec3 acceleration;
-    float radius;
-    bool objIsStatic;
+    glm::vec3 mPosition;
+    glm::vec3 mPrePosition;
+    glm::vec3 mAcceleration;
+    float mRadius;
+    bool mIsStatic;
 
-    Model* model;
+    Model* mModel;
 };
 
-std::vector<VerletParticle*>* createObjs(size_t pCount, float pObjRadius, float pSpawnRadius, const char* pVertexPath, const char* pFragPath, const char* pModelPath);
 VerletParticle* createParticle(glm::vec3 pPos, float pObjRadius, const char* pModelPath, const Shader* lShader);

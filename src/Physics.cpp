@@ -1,5 +1,6 @@
 #include "../include/Physics.h"
 #include <list>
+#include <GLFW/glfw3.h>
 #include "../include/Constants.h"
 #include "../include/Input.h"
 

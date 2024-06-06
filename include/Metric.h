@@ -26,6 +26,6 @@ public:
     double getElapsed() const;
     double getLastDeltaTime() const;
 private:
-    double prevTime, currTime, deltaTime, elaspedTime;
-    unsigned int frameCount, fps;
+    double mPrevTime, mmCurrTime, mDeltaTime, mElaspedTime;
+    unsigned int mFrameCount, mFps;
 };

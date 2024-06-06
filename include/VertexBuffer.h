@@ -19,6 +19,6 @@ public:
 
     GLsizei getCount() const;
 private:
-    GLsizei count;
-    GLuint bufferID, vao;
+    GLsizei mVertCount;
+    GLuint mBufferID, mVaoID;
 };

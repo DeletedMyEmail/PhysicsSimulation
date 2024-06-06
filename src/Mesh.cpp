@@ -3,20 +3,20 @@
 #include <iostream>
 #include <sstream>
 
-Mesh::Mesh(const char* pFilePath, float pAlpha) : vertexBuffer(VertexBuffer()), indexBuffer(IndexBuffer()), alpha(pAlpha) {
-    if (!parse(pFilePath, vertexBuffer, indexBuffer)) {
+Mesh::Mesh(const char* pFilePath, float pAlpha) : mVertexBuffer(VertexBuffer()), mindexBuffer(IndexBuffer()), mAlpha(pAlpha) {
+    if (!parse(pFilePath, mVertexBuffer, mindexBuffer)) {
         throw std::runtime_error("Could not parse model file.");
     }
 }
 
 void Mesh::draw() const {
-    vertexBuffer.bind();
-    indexBuffer.bind();
-    glDrawElements(GL_TRIANGLES, indexBuffer.getCount(), GL_UNSIGNED_INT, nullptr);
+    mVertexBuffer.bind();
+    mindexBuffer.bind();
+    glDrawElements(GL_TRIANGLES, mindexBuffer.getCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 Vertex Mesh::parseVertex(const char* pLine) const {
-    Vertex lVertex{0,0,0,0.0,0.0,0.0,0.54,0.5,0.5,alpha};
+    Vertex lVertex{0,0,0,0.0,0.0,0.0,0.54,0.5,0.5,mAlpha};
 
     sscanf(pLine, "v %f %f %f", &lVertex.x, &lVertex.y, &lVertex.z);
     return lVertex;

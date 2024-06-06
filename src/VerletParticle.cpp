@@ -2,60 +2,60 @@
 #include "../include/Constants.h"
 #include <ctime>
 
-VerletParticle::VerletParticle(Model* pModel, const glm::vec3& pPosition, float pRadius) : position(pPosition), prePosition(pPosition), acceleration(glm::vec3(0.0f)), radius(pRadius), objIsStatic(false), model(pModel) {
-    model->translate(position);
+VerletParticle::VerletParticle(Model* pModel, const glm::vec3& pPosition, float pRadius) : mPosition(pPosition), mPrePosition(pPosition), mAcceleration(glm::vec3(0.0f)), mRadius(pRadius), mIsStatic(false), mModel(pModel) {
+    mModel->translate(mPosition);
 }
 
 void VerletParticle::updatePos(const float pDeltaTime) {
     if (isStatic()) return;
 
-    const glm::vec3 lVel = position - prePosition;
-    prePosition = position;
-    position += lVel + acceleration * pDeltaTime * pDeltaTime;
-    acceleration = glm::vec3(0.0f);
+    const glm::vec3 lVel = mPosition - mPrePosition;
+    mPrePosition = mPosition;
+    mPosition += lVel + mAcceleration * pDeltaTime * pDeltaTime;
+    mAcceleration = glm::vec3(0.0f);
 
-    model->translate(position - prePosition);
+    mModel->translate(mPosition - mPrePosition);
 }
 
 void VerletParticle::applyForce(const glm::vec3& pForce) {
     if (isStatic()) return;
-    acceleration += pForce;
+    mAcceleration += pForce;
 }
 
 void VerletParticle::setPosition(const glm::vec3& pPosition) {
-    position = pPosition;
+    mPosition = pPosition;
 }
 
 Model* VerletParticle::getModel() const {
-    return model;
+    return mModel;
 }
 
 glm::vec3& VerletParticle::getPosition() {
-    return position;
+    return mPosition;
 }
 
 glm::vec3& VerletParticle::getPrevPosition() {
-    return prePosition;
+    return mPrePosition;
 }
 
 float VerletParticle::getRadius() const {
-    return radius;
+    return mRadius;
 }
 
 void VerletParticle::collide(VerletParticle& pOther) {
     if (isStatic() || this == &pOther) return;
 
-    const glm::vec3 lColAxis = position - pOther.position;
+    const glm::vec3 lColAxis = mPosition - pOther.mPosition;
     const float lDist = glm::length(lColAxis);
 
-    if (lDist >= radius + pOther.getRadius()) return;
+    const float lDelta = mRadius + pOther.getRadius() - lDist;
+    if (lDelta <= 0) return;
 
     const glm::vec3 lNorm = lColAxis / lDist;
-    const float lDelta = radius + pOther.getRadius() - lDist;
     const glm::vec3 lPosDiff = lNorm * lDelta * COLLISION_DAMPING;
 
-    position += lPosDiff;
-    model->translate(lPosDiff);
+    mPosition += lPosDiff;
+    mModel->translate(lPosDiff);
     if (!pOther.isStatic()) {
         pOther.getPosition() -= lPosDiff;
         pOther.getModel()->translate(-lPosDiff);
@@ -63,17 +63,17 @@ void VerletParticle::collide(VerletParticle& pOther) {
 }
 
 void VerletParticle::move(const glm::vec3& pTranslation) {
-    model->translate(pTranslation);
-    position += pTranslation;
-    prePosition += pTranslation;
+    mModel->translate(pTranslation);
+    mPosition += pTranslation;
+    mPrePosition += pTranslation;
 }
 
 void VerletParticle::setStatic(const bool pIsStatic) {
-    objIsStatic = pIsStatic;
+    mIsStatic = pIsStatic;
 }
 
 bool VerletParticle::isStatic() const {
-    return objIsStatic;
+    return mIsStatic;
 }
 
 std::vector<VerletParticle*>* createObjs(const size_t pCount, const float pObjRadius, const float pSpawnRadius,
@@ -99,6 +99,7 @@ std::vector<VerletParticle*>* createObjs(const size_t pCount, const float pObjRa
 VerletParticle* createParticle(const glm::vec3 pPos, const float pObjRadius, const char* pModelPath, const Shader* lShader) {
     const auto lMesh = new Mesh(pModelPath, 1.0f);
     const auto lModel =  new Model(lMesh, lShader);
+
     lModel->scale(glm::vec3(pObjRadius));
 
     return new VerletParticle(lModel, pPos, pObjRadius);

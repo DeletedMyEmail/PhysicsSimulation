@@ -2,15 +2,15 @@
 #include <cstddef>
 #include <iostream>
 
-VertexBuffer::VertexBuffer() : count(0), bufferID(0), vao(0) {}
+VertexBuffer::VertexBuffer() : mVertCount(0), mBufferID(0), mVaoID(0) {}
 
-VertexBuffer::VertexBuffer(const Vertex* pVertices, const GLsizei pCount) : count(pCount), bufferID(0), vao(0) {
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &bufferID);
+VertexBuffer::VertexBuffer(const Vertex* pVertices, const GLsizei pCount) : mVertCount(pCount), mBufferID(0), mVaoID(0) {
+    glGenVertexArrays(1, &mVaoID);
+    glGenBuffers(1, &mBufferID);
 
-    glBindVertexArray(vao);
+    glBindVertexArray(mVaoID);
 
-    glBindBuffer(GL_ARRAY_BUFFER, bufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, mBufferID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*pCount, pVertices, GL_STATIC_DRAW);
 
     // position attribute
@@ -29,13 +29,13 @@ VertexBuffer::VertexBuffer(const Vertex* pVertices, const GLsizei pCount) : coun
 
 VertexBuffer::~VertexBuffer() {
     //glDeleteBuffers(1, &bufferID);
-    if (vao != 0)
-        glDeleteVertexArrays(1, &vao);
+    if (mVaoID != 0)
+        glDeleteVertexArrays(1, &mVaoID);
 }
 
 void VertexBuffer::bind() const {
     //glBindBuffer(GL_ARRAY_BUFFER, bufferID);
-    glBindVertexArray(vao);
+    glBindVertexArray(mVaoID);
 }
 
 void VertexBuffer::unbind() {
@@ -44,5 +44,5 @@ void VertexBuffer::unbind() {
 }
 
 GLsizei VertexBuffer::getCount() const {
-    return count;
+    return mVertCount;
 }

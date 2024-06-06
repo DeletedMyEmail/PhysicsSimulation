@@ -77,6 +77,15 @@ Simulation* Simulation::getInstance() {
     return sInstance;
 }
 
+bool overlap(glm::vec3 p1, glm::vec3 p2) {
+    const glm::vec3 lColAxis = p1 - p2;
+    const float lDist = glm::length(lColAxis);
+
+    const float lDelta = 2 - lDist;
+
+    return lDelta > 0;
+}
+
 void Simulation::processParticles(const glm::mat4& pViewProj, const float pDeltaTime) {
     for (VerletParticle* lParticle : particles) {
         if (lParticle == nullptr) continue;

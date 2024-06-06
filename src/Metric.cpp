@@ -2,23 +2,23 @@
 
 #include <GLFW/glfw3.h>
 
-FPSCounter::FPSCounter() : prevTime(0), currTime(glfwGetTime()), deltaTime(0), elaspedTime(0), frameCount(0), fps(0) {}
+FPSCounter::FPSCounter() : mPrevTime(0), mmCurrTime(glfwGetTime()), mDeltaTime(0), mElaspedTime(0), mFrameCount(0), mFps(0) {}
 
 void FPSCounter::update() {
-    currTime = glfwGetTime();
-    deltaTime = currTime - prevTime;
-    prevTime = currTime;
+    mmCurrTime = glfwGetTime();
+    mDeltaTime = mmCurrTime - mPrevTime;
+    mPrevTime = mmCurrTime;
 
-    elaspedTime += deltaTime;
-    frameCount++;
+    mElaspedTime += mDeltaTime;
+    mFrameCount++;
 }
 
 unsigned int FPSCounter::calcFPS(double& pAVGFrameTime) {
-    fps = 1 / elaspedTime * frameCount;
-    pAVGFrameTime = elaspedTime / frameCount * 1000;
-    frameCount = 0;
-    elaspedTime = 0;
-    return fps;
+    mFps = 1 / mElaspedTime * mFrameCount;
+    pAVGFrameTime = mElaspedTime / mFrameCount * 1000;
+    mFrameCount = 0;
+    mElaspedTime = 0;
+    return mFps;
 }
 
 std::string FPSCounter::calcToString() {
@@ -28,13 +28,13 @@ std::string FPSCounter::calcToString() {
 }
 
 double FPSCounter::getLastDeltaTime() const {
-    return deltaTime;
+    return mDeltaTime;
 }
 
 double FPSCounter::getElapsed() const {
-    return elaspedTime;
+    return mElaspedTime;
 }
 
 double FPSCounter::getFPS() const {
-    return fps;
+    return mFps;
 }

@@ -1,20 +1,20 @@
 #include "../include/IndexBuffer.h"
 
-IndexBuffer::IndexBuffer() : count(0), bufferID(0) {}
+IndexBuffer::IndexBuffer() : mIndexCount(0), mBufferID(0) {}
 
-IndexBuffer::IndexBuffer(const unsigned int* pIndices, const GLsizei pCount) : count(pCount), bufferID(0) {
-    glGenBuffers(1, &bufferID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID);
+IndexBuffer::IndexBuffer(const unsigned int* pIndices, const GLsizei pCount) : mIndexCount(pCount), mBufferID(0) {
+    glGenBuffers(1, &mBufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, pCount * sizeof(unsigned int), pIndices, GL_STATIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer() {
-    if (bufferID != 0)
-        glDeleteBuffers(1, &bufferID);
+    if (mBufferID != 0)
+        glDeleteBuffers(1, &mBufferID);
 }
 
 void IndexBuffer::bind() const {
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferID);
 }
 
 void IndexBuffer::unbind() {
@@ -22,5 +22,5 @@ void IndexBuffer::unbind() {
 }
 
 GLsizei IndexBuffer::getCount() const {
-    return count;
+    return mIndexCount;
 }

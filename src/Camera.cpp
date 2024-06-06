@@ -5,26 +5,26 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <sstream>
 #include <unordered_map>
-
+#include <GLFW/glfw3.h>
 #include "../include/Input.h"
 #include "../libs/glm/gtx/dual_quaternion.hpp"
 
 Camera::Camera(const float pFov, const float pWidth, const float pHeight, const float pNear, const float pFar) :
-    projection(glm::perspective(pFov/2.0f, pWidth/pHeight, pNear, pFar)),
-    view(glm::mat4(1.0f)),
-    yaw(0.0f),
-    pitch(0.0f),
-    sensitivity(0.2f),
-    lookAt(glm::vec3(0.0f)),
-    position(glm::vec3(0.0f)),
-    speed(6.5f)
+    mProjection(glm::perspective(pFov/2.0f, pWidth/pHeight, pNear, pFar)),
+    mView(glm::mat4(1.0f)),
+    mYaw(0.0f),
+    mPitch(0.0f),
+    mSensitivity(0.2f),
+    mLookAt(glm::vec3(0.0f)),
+    mPosition(glm::vec3(0.0f)),
+    mSpeed(6.5f)
 {
     update();
 }
 
 void Camera::translate(const glm::vec3& pTranslation) {
-    view = glm::translate(view, -1.0f*pTranslation);
-    position += -1.0f*pTranslation;
+    mView = glm::translate(mView, -1.0f*pTranslation);
+    mPosition += -1.0f*pTranslation;
 }
 
 void Camera::processKeyInput(const float pDeltaTime) {
@@ -32,25 +32,25 @@ void Camera::processKeyInput(const float pDeltaTime) {
         // TODO: stop window
         return;
     if (Input::isKeyPressed(GLFW_KEY_W))
-        moveFront(pDeltaTime * -speed);
+        moveFront(pDeltaTime * -mSpeed);
     if (Input::isKeyPressed(GLFW_KEY_S))
-        moveFront(pDeltaTime * speed);
+        moveFront(pDeltaTime * mSpeed);
     if (Input::isKeyPressed(GLFW_KEY_A))
-        moveSideway(pDeltaTime * speed);
+        moveSideway(pDeltaTime * mSpeed);
     if (Input::isKeyPressed(GLFW_KEY_D))
-        moveSideway(pDeltaTime * -speed);
+        moveSideway(pDeltaTime * -mSpeed);
     if (Input::isKeyPressed(GLFW_KEY_SPACE))
-        moveUp(pDeltaTime * -speed);
+        moveUp(pDeltaTime * -mSpeed);
     if (Input::isKeyPressed(GLFW_KEY_LEFT_SHIFT))
-        moveUp(pDeltaTime * speed);
+        moveUp(pDeltaTime * mSpeed);
 }
 
 void Camera::moveFront(float pAmount) {
-    translate(pAmount * lookAt);
+    translate(pAmount * mLookAt);
 }
 
 void Camera::moveSideway(float pAmount) {
-    translate(normalize(cross(lookAt, glm::vec3(0.0f, 1.0f, 0.0f))) * pAmount);
+    translate(normalize(cross(mLookAt, glm::vec3(0.0f, 1.0f, 0.0f))) * pAmount);
 }
 
 void Camera::moveUp(float pAmount) {
@@ -58,36 +58,36 @@ void Camera::moveUp(float pAmount) {
 }
 
 void Camera::update() {
-    view = glm::lookAt(position, position + lookAt, glm::vec3(0.0f, 1.0f, 0.0f));
-    viewProjection = projection * view;
+    mView = glm::lookAt(mPosition, mPosition + mLookAt, glm::vec3(0.0f, 1.0f, 0.0f));
+    mViewProjection = mProjection * mView;
 }
 
 glm::mat4& Camera::getViewPorjection() {
-    return viewProjection;
+    return mViewProjection;
 }
 
 void Camera::processCursorMovement(double pRelX, double pRelY) {
-    yaw += pRelX * sensitivity;
-    pitch -= pRelY * sensitivity;
-    pitch = std::clamp(pitch, -89.0, 89.0);
+    mYaw += pRelX * mSensitivity;
+    mPitch -= pRelY * mSensitivity;
+    mPitch = std::clamp(mPitch, -89.0, 89.0);
 
     glm::vec3 front;
-    front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-    front.y = sin(glm::radians(pitch));
-    front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-    lookAt = normalize(front);
+    front.x = cos(glm::radians(mPitch)) * cos(glm::radians(mYaw));
+    front.y = sin(glm::radians(mPitch));
+    front.z = cos(glm::radians(mPitch)) * sin(glm::radians(mYaw));
+    mLookAt = normalize(front);
 }
 
 void Camera::setSensitive(float pSensitivity) {
-    sensitivity = pSensitivity;
+    mSensitivity = pSensitivity;
 }
 
 float Camera::getSensitive() const {
-    return sensitivity;
+    return mSensitivity;
 }
 
 Camera::operator std::string() const {
     std::ostringstream lStream;
-    lStream << "Yaw: " << yaw << " Pitch: " << pitch << " Position: " << position.x << " " << position.y << " " << position.z << " LookAt: " << lookAt.x << " " << lookAt.y << " " << lookAt.z;
+    lStream << "Yaw: " << mYaw << " Pitch: " << mPitch << " Position: " << mPosition.x << " " << mPosition.y << " " << mPosition.z << " LookAt: " << mLookAt.x << " " << mLookAt.y << " " << mLookAt.z;
     return lStream.str();
 }
