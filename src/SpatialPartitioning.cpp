@@ -11,7 +11,7 @@ glm::vec3 getChunkPos(const glm::vec3& pPos) {
     };
 }
 
-void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk, glm::vec3 pOldPos, glm::vec3 pOldChunkPos) {
+void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk) {
     std::list<VerletParticle*>& lNewChunk = chunks[getChunkPos(pParticle->getPosition())];
 
     if (pPrevChunk == lNewChunk) return;

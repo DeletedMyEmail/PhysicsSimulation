@@ -19,5 +19,5 @@ inline std::list<VerletParticle*> particles;
 
 glm::vec3 getChunkPos(const glm::vec3& pPos);
 std::list<std::list<VerletParticle*>*> getChunksInRadius(const glm::vec3& pChunkPos, const glm::vec3& pPos, float pRadius);
-void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk, glm::vec3 pOldPos, glm::vec3 pOldChunkPos);
+void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk);
 void spawnParticle(VerletParticle* pParticle);

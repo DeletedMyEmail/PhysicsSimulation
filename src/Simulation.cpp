@@ -83,13 +83,12 @@ void Simulation::processParticles(const glm::mat4& pViewProj, const float pDelta
 
         glm::vec3 lChunkPos = getChunkPos(lParticle->getPosition());
         std::list<std::list<VerletParticle*>*> lRelChunks = getChunksInRadius(lChunkPos, lParticle->getPosition(), PARTICLE_RADIUS);
-        glm::vec3 lOldPos = lParticle->getPosition();
 
         applyForces(lParticle);
         handleConstrains(lParticle, glm::vec3(0,0,0), CONSTRAIN_RADIUS);
         handleCollisions(lRelChunks, lParticle);
         updateAndDraw(lParticle, pDeltaTime, pViewProj);
-        updateChunk(lParticle, chunks[lChunkPos], lOldPos, lChunkPos);
+        updateChunk(lParticle, chunks[lChunkPos]);
     }
 }
 
