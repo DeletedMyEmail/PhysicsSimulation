@@ -11,7 +11,7 @@ constexpr float G_CENTRAL = 20.0f;
 constexpr int CONSTRAIN_RADIUS = 30.0f;
 
 // partitioning
-inline constexpr float CHUNK_SIZE = PARTICLE_RADIUS*3.0f;
+inline constexpr float CHUNK_SIZE = CONSTRAIN_RADIUS*3;//PARTICLE_RADIUS*3.0f;
 inline constexpr unsigned int CHUNKS_PER_DIMENSION = CONSTRAIN_RADIUS*2 / CHUNK_SIZE;
 
 // paths

@@ -17,7 +17,7 @@ struct Vec3Hash {
 inline std::unordered_map<glm::vec3, std::list<VerletParticle*>, Vec3Hash> chunks(CHUNKS_PER_DIMENSION);
 inline std::list<VerletParticle*> particles;
 
-glm::vec3 getChunkPos(glm::vec3 pPos);
+glm::vec3 getChunkPos(const glm::vec3& pPos);
 std::list<std::list<VerletParticle*>*> getChunksInRadius(const glm::vec3& pChunkPos, const glm::vec3& pPos, float pRadius);
-void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk);
+void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk, glm::vec3 pOldPos, glm::vec3 pOldChunkPos);
 void spawnParticle(VerletParticle* pParticle);

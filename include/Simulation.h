@@ -13,7 +13,7 @@ public:
     std::vector<VerletParticle>& getParticles();
 private:
     Simulation();
-    void processParticles(const glm::mat4& pViewProj, float pDeltaTime);
+    static void processParticles(const glm::mat4& pViewProj, float pDeltaTime);
 private:
     inline static Simulation* sInstance = nullptr;
     static constexpr double METRIC_CALC_INTERVAL = 1.0/20;

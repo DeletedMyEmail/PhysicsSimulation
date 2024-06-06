@@ -13,7 +13,7 @@
 ## Feature Demo Videos
 
 ## Roadmap 
+- Fix mem leaks everywhere
 - Multithreading
 - [Instance rendering](https://learnopengl.com/Advanced-OpenGL/Instancing)
-- Chunks or trees for spatial partitioning
-- care about destroying objects lol
+- Fix mem leaks everywhere

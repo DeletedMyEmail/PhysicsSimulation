@@ -55,7 +55,7 @@ void Window::setCloseCallback(GLFWwindowclosefun pCallbackFun) {
 }
 
 bool Window::isRunning() const {
-    return glfwWindowShouldClose(mWindow);
+    return !glfwWindowShouldClose(mWindow);
 }
 
 void Window::stop() {

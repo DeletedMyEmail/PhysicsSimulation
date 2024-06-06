@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include <GLFW/glfw3.h>
 
 Shader::Shader(const char* pVertexShaderSource, const char* pFragmentShaderSource) : shaderProgram(glCreateProgram()) {
     const std::string lVertexString = parse(pVertexShaderSource);

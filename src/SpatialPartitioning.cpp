@@ -1,16 +1,17 @@
 #include "../include/SpatialPartitioning.h"
 #include <iostream>
 #include <list>
+#include "../include/Log.h"
 
-glm::vec3 getChunkPos(const glm::vec3 pPos) {
+glm::vec3 getChunkPos(const glm::vec3& pPos) {
     return {
-        std::floor(pPos.x / CHUNK_SIZE),
-        std::floor(pPos.y / CHUNK_SIZE),
-        std::floor(pPos.z / CHUNK_SIZE)
+        static_cast<int>(pPos.x / CHUNK_SIZE),
+        static_cast<int>(pPos.y / CHUNK_SIZE),
+        static_cast<int>(pPos.z / CHUNK_SIZE)
     };
 }
 
-void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk) {
+void updateChunk(VerletParticle* pParticle, std::list<VerletParticle*>& pPrevChunk, glm::vec3 pOldPos, glm::vec3 pOldChunkPos) {
     std::list<VerletParticle*>& lNewChunk = chunks[getChunkPos(pParticle->getPosition())];
 
     if (pPrevChunk == lNewChunk) return;
