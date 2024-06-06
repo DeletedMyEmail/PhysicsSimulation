@@ -31,14 +31,14 @@ void Simulation::run() {
 
         // metrics
         lFPSCounter.update();
-        if (lFPSCounter.getElapsed() >= 1.0/20) {
+        if (lFPSCounter.getElapsed() >= METRIC_CALC_INTERVAL) {
             std::string lTitle = lFPSCounter.calcToString() + " | Verlet Particles: " + std::to_string(lObjCount);
             glfwSetWindowTitle(mWindow.getGLFWWindow(), lTitle.c_str());
         }
 
         // spawn new obj ever 0.05s
         lCurrentTime = glfwGetTime();
-        if (lCurrentTime - lTimeSinceLastSpawn >= 0.05 && lObjCount < MAX_PARTICLE_COUNT) {
+        if (lCurrentTime - lTimeSinceLastSpawn >= PARTICLE_SPAWN_INTERVAL && lObjCount < MAX_PARTICLE_COUNT) {
             lTimeSinceLastSpawn = lCurrentTime;
             lObjCount++;
 

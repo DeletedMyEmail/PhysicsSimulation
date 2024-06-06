@@ -34,5 +34,4 @@ private:
     WindowSetting mSettings;
     Camera mCamera;
     std::pair<double, double> mLastCursorPos;
-    bool mRunning;
 };

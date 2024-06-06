@@ -16,6 +16,8 @@ private:
     void processParticles(const glm::mat4& pViewProj, float pDeltaTime);
 private:
     inline static Simulation* sInstance = nullptr;
+    static constexpr double METRIC_CALC_INTERVAL = 1.0/20;
+    static constexpr double PARTICLE_SPAWN_INTERVAL = 0.05;
 
     Window mWindow;
     std::vector<VerletParticle> mParticles;

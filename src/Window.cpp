@@ -13,8 +13,7 @@ Window::Window(const WindowSettings& pSettings) :
     mWindow(glfwSetup(pSettings)),
     mSettings(pSettings),
     mCamera(Camera(90.0f, pSettings.width, pSettings.height, 0.1f, 1000.0f)),
-    mLastCursorPos(Input::getMousePosition()),
-    mRunning(true)
+    mLastCursorPos(Input::getMousePosition())
 {
     mCamera.translate(glm::vec3(0,CONSTRAIN_RADIUS,-CONSTRAIN_RADIUS*1.5f));
 }
@@ -56,11 +55,11 @@ void Window::setCloseCallback(GLFWwindowclosefun pCallbackFun) {
 }
 
 bool Window::isRunning() const {
-    return mRunning;
+    return glfwWindowShouldClose(mWindow);
 }
 
 void Window::stop() {
-    mRunning = false;
+    glfwSetWindowShouldClose(mWindow, true);
 }
 
 WindowSetting Window::getSettings() const {
