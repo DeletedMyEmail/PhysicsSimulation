@@ -14,4 +14,3 @@
 - 73 particles in 1 chunk? tf? spatial partitioning killed physics and fps
 - [Instance rendering](https://learnopengl.com/Advanced-OpenGL/Instancing)
 - Multithreading
-- Fix mem leaks everywhere
